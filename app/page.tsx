@@ -159,7 +159,7 @@ const certificates = [
     title: "Seniors’ Exit Seminar",
     issuer: "Career Development Centre",
     year: "2026",
-    note: "Added to my interest in cybersecurity, digital safety, and the role of IT in protecting organizations.",
+    note: "Added to my interest in future decision making for my future and career.",
     image: "/certificates/certificate-01.jpg",
   },
   {
@@ -183,19 +183,19 @@ const lenses = [
     icon: Code2,
     title: "Technology",
     description:
-      "I’m still growing in web development, but I like building simple pages that look organized and feel easy to use.",
+      "Technology driven youngster, I am into web and mobile development. Hardware and user support is also part of my capabilities.",
   },
   {
     icon: Palette,
     title: "Design",
     description:
-      "This is the main part of my portfolio. I like layouts that feel clean, readable, and not overcrowded.",
+      "Design made me realize what technology could offer 8 years ago. I do layouts for almost 7 years, and worked with many professionals and well-known organizations.",
   },
   {
     icon: Building2,
     title: "Real Estate",
     description:
-      "Real estate helped me become more careful with details, presentation, and how information is shown to clients.",
+      "Real estate helped me become more careful with details, presentation, and how information is shown to clients. It also made my communication and connection to other clients better",
   },
 ];
 
@@ -215,7 +215,7 @@ const profileTabs = [
     icon: PenTool,
     title: "I enjoy making visuals feel clean and organized.",
     description:
-      "My design work focuses on social media graphics, promotional materials, branding assets, and layouts that are easy to read.",
+      "My design work focuses on social media graphics, promotional materials, branding assets, and layouts that are on-brand and look professional.",
     points: ["Social media graphics", "Promotional content", "Branding and layout work"],
   },
   {
@@ -262,9 +262,9 @@ const services = [
   },
   {
     icon: HomeIcon,
-    title: "Real Estate Presentation",
+    title: "Real Estate Listings",
     description:
-      "Property listing visuals and client-facing materials built around clarity and trust.",
+      "Property listing visuals and client-facing selling materials built around clarity and trust.",
   },
 ];
 
@@ -293,7 +293,7 @@ const experience = [
     title: "Real Estate Marketing Agent",
     place: "Filipino Homes",
     description:
-      "Created digital marketing content for real estate listings and helped present property information in a clearer, more client-friendly way.",
+      "Created digital marketing content for real estate listings, helped present property information in a clearer, more client-friendly way, and sell properties with trust and confidence.",
     highlights: ["Property marketing", "Client communication", "Listing presentation"],
   },
   {
@@ -302,7 +302,7 @@ const experience = [
     title: "BS Information Technology",
     place: "University of St. La Salle - Bacolod",
     description:
-      "Studied web development and mobile development, with capstone work involving PHP-based systems and custom APIs.",
+      "Studied web development, mobile development, and netowrking, with capstone work involving PHP-based systems and custom APIs.",
     highlights: ["Web development", "Mobile development", "PHP APIs"],
   },
 ];
@@ -311,17 +311,17 @@ const principles = [
   {
     icon: Eye,
     title: "Clarity first",
-    description: "When someone opens the page, I want them to understand what I do without overthinking it.",
+    description: "Client should envisioned the project clearl, I want them to understand what I do without overthinking it.",
   },
   {
     icon: Target,
     title: "Purposeful details",
-    description: "Spacing, labels, and layout matter because they make the work feel more finished.",
+    description: "Spacing, labels, and layout matter because they make the work feel more finished and the project understandable.",
   },
   {
     icon: Clock3,
     title: "Simple but polished",
-    description: "I do not want the site to feel overloaded. I want it to feel direct and easy to browse.",
+    description: "I do not want the project to feel overloaded. I want it to feel direct and easy to grasp while looking professional and neat.",
   },
 ];
 
@@ -790,7 +790,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
             Certificates that support my background and growth.
           </h2>
           <p className="mt-5 leading-8 text-neutral-400">
-            I only included a few certificates here so the section stays clean and does not feel like filler.
+            Long way to go since I am mostly a self taught student.
           </p>
         </div>
 
@@ -810,10 +810,6 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
                 <h3 className="mt-3 text-xl font-semibold">{cert.title}</h3>
                 <p className="mt-2 text-sm text-neutral-500">{cert.issuer}</p>
                 <p className="mt-5 leading-7 text-neutral-400">{cert.note}</p>
-                <button className="mt-6 inline-flex items-center gap-2 text-sm text-neutral-300 transition hover:text-white">
-                  View certificate
-                  <ExternalLink className="h-4 w-4" />
-                </button>
               </CardContent>
             </Card>
           ))}
@@ -881,7 +877,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
             <div>
               <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-amber-300">Details Matter</p>
               <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-                I try to keep my work simple, readable, and properly arranged.
+                I keep my work simple, professional, and properly arranged.
               </h2>
             </div>
             <div className="grid gap-4 md:grid-cols-3">
