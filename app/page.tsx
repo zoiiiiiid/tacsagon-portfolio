@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState } from "react";
 import Image from "next/image";
+import { Analytics } from "@vercel/analytics/next"
 import { motion, useScroll, useSpring } from "framer-motion";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import {
