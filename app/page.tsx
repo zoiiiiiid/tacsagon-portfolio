@@ -387,14 +387,6 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
             ))}
           </div>
 
-          <a
-            href={CV_HREF}
-            download
-            className="inline-flex h-12 items-center justify-center rounded-full bg-white px-7 text-sm font-medium text-neutral-950 transition hover:bg-amber-200">
-            Download CV
-            <Download className="ml-2 h-4 w-4" />
-          </a>
-
           <button
             onClick={() => setMenuOpen((value) => !value)}
             className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 lg:hidden"
