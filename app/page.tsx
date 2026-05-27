@@ -1016,7 +1016,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
               <Mail className="h-4 w-4" />
             </a>
           </div>
-          <p>© 2026 Lance Jiro Tacsagon. Built using Next.js, Typescript, and Js.</p>
+          <p>© 2026 Lance Jiro Tacsagon. Built with Next.js, and Typescript.</p>
         </div>
       </footer>
 
