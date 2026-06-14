@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   BadgeCheck,
   Building2,
+  BriefcaseBusiness,
   CheckCircle2,
   ChevronRight,
   Code2,
@@ -55,7 +56,6 @@ const stagger = {
 const navItems = [
   { label: "Portfolio View", href: "#portfolio-view" },
   { label: "About", href: "#about" },
-  { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Achievements", href: "#achievements" },
@@ -91,10 +91,10 @@ const workTypes: Array<{
     description:
       "A focused view of posters, social media graphics, marketing materials, branding assets, and freelance design experience from 2018 to present.",
     focus: ["Poster design", "Social media graphics", "Marketing materials", "Branding assets"],
-    reviewOrder: ["Featured graphics", "Freelance design background", "Design and editing skills"],
+    reviewOrder: ["Featured graphics", "Freelance design background", "Design and editing background"],
     stats: [
       ["8+ years", "freelance design practice"],
-      ["10", "design entries in the gallery"],
+      ["100+", "pubmats created"],
       ["Print + digital", "visual output range"],
     ],
     tone: "Visual, campaign-ready, detail-oriented",
@@ -115,7 +115,7 @@ const workTypes: Array<{
     description:
       "A practical view of listing content, property presentations, client follow-up, and marketing visuals for real estate work.",
     focus: ["Listing content", "Property presentations", "Client follow-up", "Digital marketing"],
-    reviewOrder: ["Real estate samples", "Filipino Homes role", "Communication and marketing skills"],
+    reviewOrder: ["Real estate samples", "Filipino Homes role", "Communication and marketing background"],
     stats: [
       ["2026–Present", "real estate marketing"],
       ["4", "property sample entries"],
@@ -139,10 +139,10 @@ const workTypes: Array<{
     description:
       "A structured view of web/mobile development, PHP and custom APIs, IT support, cybersecurity exposure, and technical project work.",
     focus: ["Web development", "Mobile development", "PHP and APIs", "IT support"],
-    reviewOrder: ["Web projects", "Internship and freelance work", "Certifications and technical skills"],
+    reviewOrder: ["Web projects", "Internship and freelance work", "Certifications and technical background"],
     stats: [
       ["2026", "BSIT completion"],
-      ["15%", "reported system issue reduction"],
+      ["3 Projects", "Personal Portfolio, ICTC Website, AI-Driven Website"],
       ["CCNA", "networking foundation"],
     ],
     tone: "Structured, technical, hiring-team friendly",
@@ -228,7 +228,7 @@ const workItems: Array<{
     role: "Freelance Graphic Designer",
     tools: "Photoshop / Canva",
     description: "A campaign, event, brand, or social media layout prepared as an additional featured poster.",
-    year: "2026",
+    year: "2021",
     status: "Poster Design",
     image: "/work/artwork-06.png",
   },
@@ -299,12 +299,12 @@ const workItems: Array<{
     image: "/work/portfolio-website-02.png",
   },
   {
-    title: "Web Sample 03",
+    title: "ThinkFast AI",
     category: "Technology",
     workTypes: ["developer"],
-    role: "Web / Mobile Developer",
-    tools: "TypeScript, APIs, Responsive UI",
-    description: "A third web or mobile project sample for presenting one more technical build.",
+    role: "Web Developer / Front-End and Back-End Developer",
+    tools: "TypeScript, React, AI-Gemini, Supabase",
+    description: "ThinkFast is a privacy-centered AI productivity platform that helps users create faster outputs while making sure their own ideas guide the result first.",
     year: "2026",
     status: "Web Project",
     image: "/work/portfolio-website-03.png",
@@ -377,7 +377,7 @@ const certificates: Array<{
     year: "2026",
     note: "IT internship work involving support, hardware concerns, and branch data coordination.",
     image: "/certificates/certificate-02.jpg",
-    workTypes: ["developer"],
+    workTypes: ["graphic", "realestate", "developer"],
   },
   {
     title: "CCNA: Switching, Routing, and Wireless Essentials",
@@ -385,28 +385,33 @@ const certificates: Array<{
     year: "2025",
     note: "Networking foundation in routing, switching, wireless basics, and IT infrastructure.",
     image: "/certificates/certificate-03.jpg",
-    workTypes: ["developer"],
+    workTypes: ["graphic", "realestate", "developer"],
   },
+ ];
+
+const seminarsAttended: Array<{
+  title: string;
+  organizer: string;
+  year: string;
+  note: string;
+}> = [
   {
     title: "Cybersecurity for National Security",
-    issuer: "Cybersecurity Activity",
+    organizer: "Cybersecurity Seminar",
     year: "2025",
-    note: "Additional cybersecurity exposure connected to awareness, responsibility, and digital protection.",
-    workTypes: ["developer"],
+    note: "Attended as part of continued exposure to cybersecurity awareness, national security, and digital responsibility.",
   },
   {
     title: "Endpoint Security",
-    issuer: "Cybersecurity Training",
+    organizer: "Cybersecurity Seminar",
     year: "2025",
-    note: "Added knowledge in securing devices, endpoints, and basic cyber hygiene practices.",
-    workTypes: ["developer"],
+    note: "Attended to strengthen awareness of endpoint protection, device security, and basic cyber hygiene practices.",
   },
   {
     title: "The Human Firewall: Cybersecurity Awareness Bacolod",
-    issuer: "Cybersecurity Awareness Program",
+    organizer: "Cybersecurity Awareness Seminar",
     year: "2025",
-    note: "Focused on user awareness, safer online behavior, and the human side of cybersecurity.",
-    workTypes: ["developer"],
+    note: "Attended a seminar focused on safer online behavior, user awareness, and the human side of cybersecurity.",
   },
 ];
 
@@ -497,31 +502,41 @@ const skillGroups: Array<{
   title: string;
   icon: IconType;
   workTypes: WorkTypeId[];
+  summary: string;
+  evidence: string;
   items: string[];
 }> = [
   {
     title: "Development & Systems",
     icon: Laptop,
     workTypes: ["developer"],
-    items: ["Web Development", "Mobile Development", "TypeScript Stack", "PHP APIs", "RESTful APIs", "Business Analysis"],
+    summary: "Builds responsive interfaces, connects front-end work with APIs, and organizes technical projects around practical user flows.",
+    evidence: "Relevant to freelance website development, BSIT coursework, mobile/web development, and capstone API work.",
+    items: ["Web Development", "Mobile Development", "TypeScript Stack", "PHP APIs", "RESTful APIs", "Business Analysis", "Responsive UI", "Deployment"],
   },
   {
     title: "IT Support & Security",
     icon: ShieldCheck,
     workTypes: ["developer"],
-    items: ["IT Support", "User Support", "Hardware Support", "Network Protocols", "Endpoint Security", "Cybersecurity"],
+    summary: "Supports users, devices, and office systems while applying networking and cybersecurity fundamentals.",
+    evidence: "Grounded in Vallacar Transit Inc. internship work, CCNA training, endpoint security exposure, and cybersecurity awareness activities.",
+    items: ["IT Support", "User Support", "Hardware Support", "Network Protocols", "Endpoint Security", "Cybersecurity", "Troubleshooting", "Branch Data Coordination"],
   },
   {
     title: "Graphic Design & Editing",
     icon: PenTool,
     workTypes: ["graphic", "realestate"],
-    items: ["Graphic Design", "Video Editing", "Social Media Graphics", "Promotional Layouts", "Branding Assets", "Project Management"],
+    summary: "Creates social media graphics, promotional materials, layout systems, branding assets, and client-ready visual concepts.",
+    evidence: "Supported by freelance design work from Jan 2018–Present, publication layout roles, yearbook work, and selected poster samples.",
+    items: ["Graphic Design", "Video Editing", "Social Media Graphics", "Promotional Layouts", "Branding Assets", "Editorial Layout", "Visual Hierarchy", "Project Management"],
   },
   {
     title: "Real Estate Marketing",
     icon: HomeIcon,
     workTypes: ["realestate", "graphic"],
-    items: ["Listing Content", "Property Presentation", "Client Communication", "Digital Marketing", "Follow-up Support", "Visual Selling Materials"],
+    summary: "Turns property information into clearer listing content, digital marketing materials, and client-facing presentations.",
+    evidence: "Connected to Filipino Homes work involving listing promotion, property presentation, and client follow-up support.",
+    items: ["Listing Content", "Property Presentation", "Client Communication", "Digital Marketing", "Follow-up Support", "Visual Selling Materials", "Client Organization", "Marketing Copy"],
   },
 ];
 
@@ -532,9 +547,9 @@ const landingStats = [
     note: "Jan 2018–Present creating social graphics, marketing materials, and branding assets.",
   },
   {
-    value: "15%",
-    label: "Reported system issue reduction",
-    note: "Contribution during IT and hardware support work at Vallacar Transit Inc.",
+    value: "3 Tracks",
+    label: "Real Estate, Full Stack Dev, Graphics Designer",
+    note: "Creative and technical disciplines developed through real client and project experience.",
   },
   {
     value: "5",
@@ -736,8 +751,6 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
   const ActiveIcon = active.icon;
   const activeWork = useMemo(() => workItems.filter((item) => item.workTypes.includes(activeWorkType)), [activeWorkType]);
   const activeExperience = useMemo(() => experience.filter((item) => item.workTypes.includes(activeWorkType)), [activeWorkType]);
-  const activeSkills = useMemo(() => skillGroups.filter((group) => group.workTypes.includes(activeWorkType)), [activeWorkType]);
-  const activeCertificates = useMemo(() => certificates.filter((cert) => cert.workTypes.includes(activeWorkType)), [activeWorkType]);
   const featuredWork = activeWork[0];
   const secondaryWork = activeWork.slice(1);
 
@@ -758,7 +771,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Main navigation">
           <a href="#top" onClick={() => setMenuOpen(false)} className="group flex items-center gap-3">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm transition duration-300 group-hover:scale-105">
-              <Sparkles className="h-4 w-4" />
+              <BriefcaseBusiness className="h-4 w-4" />
             </span>
             <span>
               <span className="block text-sm font-bold tracking-tight text-slate-950">Lance Jiro Tacsagon</span>
@@ -832,94 +845,59 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
         </AnimatePresence>
       </header>
 
-      <section id="top" className="relative isolate overflow-hidden border-b border-slate-200 bg-white px-5 py-8 lg:px-8 lg:py-10">
+      <section id="top" className="relative isolate overflow-hidden border-b border-slate-200 bg-white px-5 py-14 lg:px-8 lg:py-20">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
-          <div className="absolute left-1/2 top-0 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-blue-50 blur-3xl" />
-          <div className="absolute bottom-0 right-[-10rem] h-[24rem] w-[24rem] rounded-full bg-sky-100/70 blur-3xl" />
+          <div className="absolute left-1/2 top-[-14rem] h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-blue-50 blur-3xl" />
+          <div className="absolute bottom-[-10rem] right-[-8rem] h-[22rem] w-[22rem] rounded-full bg-sky-100/70 blur-3xl" />
         </div>
 
-        <motion.div initial="hidden" animate="visible" variants={stagger} className="mx-auto max-w-7xl">
-          <div className="grid gap-8 lg:min-h-[calc(100svh-6rem)] lg:grid-cols-[1.08fr_0.82fr] lg:items-center">
-            <motion.div variants={fadeIn}>
-              <div className="mb-6 flex flex-wrap items-center gap-3">
-                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
-                  <MapPin className="h-4 w-4 text-blue-700" />
-                  Bacolod City, Philippines
-                </span>
-                <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
-                  <BadgeCheck className="h-4 w-4" />
-                  Open to opportunities
-                </span>
-              </div>
+        <motion.div initial="hidden" animate="visible" variants={stagger} className="mx-auto max-w-6xl text-center">
+          <motion.div variants={fadeIn} className="mx-auto flex max-w-3xl flex-wrap items-center justify-center gap-3">
+            <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+              <MapPin className="h-4 w-4 text-blue-700" />
+              Bacolod City, Philippines
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
+              <BadgeCheck className="h-4 w-4" />
+              Open to opportunities
+            </span>
+          </motion.div>
 
-              <p className="mb-5 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">Portfolio for hiring teams and clients</p>
-              <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.065em] text-slate-950 md:text-6xl lg:text-7xl">
-                Design clarity. Real estate presentation. Technical execution.
-              </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
-                A focused portfolio for Lance Jiro Tacsagon, connecting freelance graphic design, property marketing, web/mobile development, and IT support in one organized review experience.
-              </p>
+          <motion.div variants={fadeIn} className="mx-auto mt-8 max-w-5xl">
+            <p className="mb-5 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">Built around design, technology, and real-world execution.</p>
+            <h1 className="text-balance text-5xl font-semibold tracking-[-0.065em] text-slate-950 md:text-6xl lg:text-7xl">
+              Design clarity. Real estate presentation. Technical execution.
+            </h1>
+            <p className="mx-auto mt-7 max-w-3xl text-lg leading-8 text-slate-600">
+              A focused portfolio for Lance Jiro Tacsagon, connecting freelance graphic design, property marketing, web/mobile development, and IT support in one organized review experience.
+            </p>
 
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-                <Button asChild className="h-12 rounded-full bg-blue-700 px-7 text-white shadow-lg shadow-blue-700/20 hover:bg-blue-600">
-                  <a href="#portfolio-view">
-                    Choose portfolio view
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button asChild variant="outline" className="h-12 rounded-full border-slate-200 bg-white px-7 text-slate-800 hover:bg-slate-50 hover:text-blue-700">
-                  <a href={CV_HREF} download>
-                    Download CV
-                    <Download className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </div>
-            </motion.div>
+            <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Button asChild className="h-12 rounded-full bg-blue-700 px-7 text-white shadow-lg shadow-blue-700/20 hover:bg-blue-600">
+                <a href="#portfolio-view">
+                  Choose portfolio view
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="h-12 rounded-full border-slate-200 bg-white px-7 text-slate-800 hover:bg-slate-50 hover:text-blue-700">
+                <a href={CV_HREF} download>
+                  Download CV
+                  <Download className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </div>
+          </motion.div>
 
-            <motion.aside variants={fadeIn} className="relative lg:self-center">
-              <div className="absolute -left-5 top-10 hidden h-20 w-20 rounded-3xl border border-blue-100 bg-blue-50 shadow-sm lg:block" />
-              <div className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl shadow-slate-950/[0.08]">
-                <div className="relative h-72 overflow-hidden bg-slate-950 sm:h-80 lg:h-[21rem]">
-                  <SmartImage
-                    src="/profile/lance.jpg"
-                    alt="Lance Jiro Tacsagon"
-                    sizes="(max-width: 1024px) 100vw, 34vw"
-                    className="object-cover object-center"
-                    priority
-                    fallbackLabel="Profile photo"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-transparent" />
-                  <div className="absolute bottom-5 left-5 right-5 text-white">
-                    <p className="text-sm font-semibold text-sky-200">BS Information Technology</p>
-                    <h2 className="mt-1 text-3xl font-semibold tracking-tight">Lance Jiro Tacsagon</h2>
-                  </div>
-                </div>
-
-                <div className="p-5">
-                  <div className="mb-4 flex items-start justify-between gap-4">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Review snapshot</p>
-                      <p className="mt-2 text-base font-semibold leading-7 text-slate-950">Graphic Designer · Real Estate Marketing Agent · Web / Mobile Developer</p>
-                    </div>
-                    <span className="hidden rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 sm:inline-flex">2026</span>
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    {landingStats.map((stat) => (
-                      <div key={stat.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
-                        <div className="flex items-start justify-between gap-3">
-                          <p className="text-xl font-semibold tracking-tight text-slate-950">{stat.value}</p>
-                          <CheckCircle2 className="mt-1 h-4 w-4 text-blue-700" />
-                        </div>
-                        <p className="mt-1 text-xs font-semibold leading-5 text-slate-700">{stat.label}</p>
-                        <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-slate-500">{stat.note}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </motion.aside>
-          </div>
+          <motion.div variants={stagger} className="mx-auto mt-12 grid max-w-5xl gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {landingStats.map((stat) => (
+              <motion.div key={stat.label} variants={fadeIn} className="rounded-2xl border border-slate-200 bg-white/85 p-4 text-left shadow-sm backdrop-blur">
+                <p className="text-2xl font-semibold tracking-tight text-slate-950">{stat.value}</p>
+                <p className="mt-1 text-sm font-semibold text-slate-700">{stat.label}</p>
+                <p className="mt-2 text-xs leading-5 text-slate-500">{stat.note}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </motion.div>
       </section>
 
@@ -929,7 +907,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.22em] text-blue-700">Portfolio view</p>
               <h2 className="mt-2 text-2xl font-semibold tracking-[-0.035em] text-slate-950 md:text-4xl">Choose the review path first.</h2>
-              <p className="mt-3 text-sm leading-6 text-slate-600">This changes the featured work, skills, experience, achievements, and visual treatment across the page.</p>
+              <p className="mt-3 text-sm leading-6 text-slate-600">Select a focus area to view work, experience, and highlights in that direction.</p>
             </div>
             <div className="grid gap-3 md:grid-cols-3">
               {workTypes.map((type) => {
@@ -982,7 +960,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
 
               <div className="grid gap-5 p-6 md:p-8">
                 <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">What changes in this view</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Track Direction</p>
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     {active.focus.map((item) => (
                       <div key={item} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
@@ -1003,7 +981,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
                 </div>
 
                 <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Best review order</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Key Points</p>
                   <div className="mt-4 grid gap-2">
                     {active.reviewOrder.map((item, index) => (
                       <div key={item} className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm">
@@ -1025,7 +1003,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
             index="01"
             eyebrow="About"
             title="Multidisciplinary, but organized around practical output."
-            description="The portfolio is structured to support fast review by recruiters, hiring managers, clients, and collaborators while keeping every professional direction easy to understand."
+            description="A multidisciplinary body of work shaped by design, technology, marketing, and practical execution."
           />
 
           <motion.div variants={fadeIn} className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
@@ -1059,54 +1037,13 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
         </motion.div>
       </section>
 
-      <section id="skills" className="border-y border-slate-200 bg-white px-5 py-20 lg:px-8">
-        <motion.div {...motionProps}>
-          <SectionHeader
-            index="02"
-            eyebrow="Skills"
-            title="Core skill groups aligned to the selected portfolio view."
-            description="Skills are grouped by discipline so hiring teams can quickly separate technical execution, support knowledge, design production, and property marketing abilities."
-          />
-
-          <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
-            {activeSkills.map((skill) => {
-              const Icon = skill.icon;
-              return (
-                <motion.div key={skill.title} variants={fadeIn}>
-                  <Card className="h-full rounded-[1.75rem] border-slate-200 bg-slate-50/60 shadow-none transition hover:bg-white hover:shadow-xl hover:shadow-slate-950/[0.04]">
-                    <CardContent className="p-6 md:p-7">
-                      <div className="mb-6 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${active.accent} text-white`}>
-                            <Icon className="h-5 w-5" />
-                          </span>
-                          <h3 className="text-xl font-semibold tracking-tight text-slate-950">{skill.title}</h3>
-                        </div>
-                        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Skill set</span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {skill.items.map((item) => (
-                          <span key={item} className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 shadow-sm">
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              );
-            })}
-          </div>
-        </motion.div>
-      </section>
-
       <section id="experience" className="px-5 py-20 lg:px-8">
         <motion.div {...motionProps}>
           <SectionHeader
-            index="03"
+            index="02"
             eyebrow="Experience"
-            title="Experience presented as a readable professional timeline."
-            description="Each role is organized by timeframe, responsibility, place, and relevant outputs so reviewers can scan the career story without digging through dense text."
+            title="Experience shaped through creative, technical, and client-facing roles."
+            description="Experience organized for quick review, with each role showing timeline, responsibilities, and key contributions clearly."
           />
 
           <div className="mx-auto max-w-7xl">
@@ -1148,10 +1085,10 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
       <section id="projects" className="border-y border-slate-200 bg-white px-5 py-20 lg:px-8">
         <motion.div {...motionProps}>
           <SectionHeader
-            index="04"
+            index="03"
             eyebrow="Projects"
-            title={`${active.label} samples with case-study style hierarchy.`}
-            description="Projects are the visual centerpiece: the featured sample leads the section, while supporting work is organized into cards with role, technologies, year, impact, and key outcomes visible at a glance."
+            title={`${active.label} projects focused on clarity, execution, and real-world outcomes.`}
+            description="Selected projects are presented with clear context, visible outcomes, and supporting details that make each work easy to understand at a glance."
           />
 
           <div className="mx-auto max-w-7xl">
@@ -1169,7 +1106,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
                     </div>
 
                     <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.06] p-5 backdrop-blur">
-                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/45">Recommended review order</p>
+                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/45">Key points</p>
                       <div className="mt-4 grid gap-2">
                         {active.reviewOrder.map((item, index) => (
                           <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3">
@@ -1211,41 +1148,68 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
       <section id="achievements" className="bg-slate-950 px-5 py-20 text-white lg:px-8">
         <motion.div {...motionProps}>
           <SectionHeader
-            index="05"
+            index="04"
             eyebrow="Achievements"
-            title="Certificates, awards, and proof of growth."
-            description="Credentials stay connected to the active portfolio view, keeping the section relevant instead of overwhelming."
+            title="Certificates, seminars, awards, and proof of growth."
+            description="Recognitions and learning experiences that show growth across academic, technical, and professional work."
             inverted
           />
 
           <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-3">
-            {activeCertificates.map((cert) => (
-              <motion.article key={cert.title} variants={fadeIn}>
-                <Card className="h-full rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none transition hover:bg-white/[0.07]">
+            {certificates.map((cert) => (
+              <motion.article key={`${cert.title}-${cert.image}`} variants={fadeIn}>
+                <Card className="h-full rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none transition hover:-translate-y-1 hover:bg-white/[0.07]">
                   <CardContent className="p-5">
-                    <div className="relative mb-5 h-44 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
-                      {cert.image ? (
-                        <SmartImage
-                          src={cert.image}
-                          alt={cert.title}
-                          sizes="(max-width: 768px) 100vw, 33vw"
-                          className="object-cover transition duration-500 hover:scale-105"
-                          fallbackLabel={cert.title}
-                        />
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <BadgeCheck className="h-12 w-12 text-sky-200" />
-                        </div>
-                      )}
+                    <a
+                      href={cert.image}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mb-5 block overflow-hidden rounded-2xl border border-white/10 bg-white p-2 shadow-lg shadow-black/10"
+                      aria-label={`Open ${cert.title} certificate preview`}
+                    >
+                      <img
+                        src={cert.image}
+                        alt={cert.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-64 w-full rounded-xl object-contain"
+                      />
+                    </a>
+                    <div className="mb-3 flex flex-wrap items-center gap-2">
+                      <span className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200">Certificate</span>
+                      <span className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/60">{cert.year}</span>
                     </div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">{cert.year}</p>
-                    <h3 className="mt-3 text-xl font-semibold leading-snug">{cert.title}</h3>
+                    <h3 className="text-xl font-semibold leading-snug">{cert.title}</h3>
                     <p className="mt-2 text-sm text-white/45">{cert.issuer}</p>
                     <p className="mt-5 leading-7 text-white/65">{cert.note}</p>
                   </CardContent>
                 </Card>
               </motion.article>
             ))}
+          </div>
+
+          <div className="mx-auto mt-12 max-w-7xl">
+            <div className="mb-5 flex flex-col justify-between gap-3 border-t border-white/10 pt-8 md:flex-row md:items-end">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-sky-200">Seminars attended</p>
+                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white">Professional Development</h3>
+              </div>
+              <p className="max-w-xl text-sm leading-6 text-white/55">Ongoing learning that supports professional growth, workplace readiness, and practical skill development.</p>
+            </div>
+            <div className="grid gap-4 md:grid-cols-3">
+              {seminarsAttended.map((seminar) => (
+                <motion.article key={seminar.title} variants={fadeIn} className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-6">
+                  <ShieldCheck className="h-5 w-5 text-sky-200" />
+                  <div className="mt-5 flex flex-wrap items-center gap-2">
+                    <span className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-sky-200">Seminar</span>
+                    <span className="rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/60">{seminar.year}</span>
+                  </div>
+                  <h4 className="mt-4 text-xl font-semibold leading-snug text-white">{seminar.title}</h4>
+                  <p className="mt-2 text-sm text-white/45">{seminar.organizer}</p>
+                  <p className="mt-5 leading-7 text-white/65">{seminar.note}</p>
+                </motion.article>
+              ))}
+            </div>
           </div>
 
           <div className="mx-auto mt-6 grid max-w-7xl gap-4 md:grid-cols-3">
@@ -1266,7 +1230,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
 
       <section id="contact" className="px-5 py-20 lg:px-8">
         <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-blue-200 bg-blue-700 text-white shadow-2xl shadow-blue-900/20">
-          <div className="grid gap-8 p-8 md:p-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+          <div className="grid gap-8 p-8 md:p-12 lg:grid-cols-[1.12fr_0.88fr] lg:items-center">
             <div>
               <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-sky-200">Contact</p>
               <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
@@ -1276,22 +1240,42 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
                 Open to opportunities, design work, simple web projects, IT support-related work, and real estate inquiries.
               </p>
             </div>
-            <div className="flex flex-col gap-3 lg:items-end">
-              <a
-                href="mailto:re.lancejirotacsagon@gmail.com?subject=Portfolio%20Inquiry"
-                className="inline-flex h-12 w-full items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-blue-700 transition hover:bg-sky-50 sm:w-auto"
-              >
-                Email me
-                <Mail className="ml-2 h-4 w-4" />
-              </a>
-              <a
-                href={CV_HREF}
-                download
-                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-white/20 px-7 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
-              >
-                Download CV
-                <Download className="ml-2 h-4 w-4" />
-              </a>
+
+            <div className="rounded-[1.75rem] border border-white/15 bg-white/[0.08] p-5 backdrop-blur md:p-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="relative mb-5 h-28 w-28 overflow-hidden rounded-3xl border border-white/20 bg-white/10 shadow-2xl shadow-blue-950/20">
+                  <SmartImage
+                    src="/profile/lance.jpg"
+                    alt="Lance Jiro Tacsagon"
+                    sizes="112px"
+                    className="object-cover object-[center_10%]"
+                    fallbackLabel="Profile photo"
+                  />
+                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.22em] text-sky-200">Let’s connect</p>
+                <h3 className="mt-2 text-2xl font-semibold tracking-tight text-white">Lance Jiro Tacsagon</h3>
+                <p className="mt-2 max-w-sm text-sm leading-6 text-blue-50/70">
+                  Reach out for portfolio inquiries, project work, collaboration, or hiring opportunities.
+                </p>
+              </div>
+
+              <div className="mt-6 grid gap-3">
+                <a
+                  href="mailto:re.lancejirotacsagon@gmail.com?subject=Portfolio%20Inquiry"
+                  className="inline-flex h-12 w-full items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-blue-700 transition hover:bg-sky-50"
+                >
+                  Email me
+                  <Mail className="ml-2 h-4 w-4" />
+                </a>
+                <a
+                  href={CV_HREF}
+                  download
+                  className="inline-flex h-12 w-full items-center justify-center rounded-full border border-white/20 px-7 text-sm font-semibold text-white transition hover:bg-white/10"
+                >
+                  Download CV
+                  <Download className="ml-2 h-4 w-4" />
+                </a>
+              </div>
             </div>
           </div>
         </div>
