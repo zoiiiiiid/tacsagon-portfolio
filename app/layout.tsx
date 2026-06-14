@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
 const inter = Inter({
@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Lance Jiro Tacsagon | Portfolio",
+  title: "Lance Jiro Tacsagon | Multidisciplinary Portfolio",
   description:
-    "Portfolio of Lance Jiro Tacsagon, a BSIT graduate, graphic artist, and real estate marketing professional from Bacolod City.",
+    "A professional portfolio for Lance Jiro Tacsagon, showcasing graphic design, real estate marketing, web/mobile development, IT support, credentials, and selected work.",
 };
 
 export default function RootLayout({
@@ -29,6 +29,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} ${geistMono.variable}`}>
         {children}
+        <Analytics />
       </body>
     </html>
   );

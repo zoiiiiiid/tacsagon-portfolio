@@ -2,44 +2,44 @@
 
 import React, { useMemo, useState } from "react";
 import Image from "next/image";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring } from "framer-motion";
 import { FaFacebookF, FaInstagram } from "react-icons/fa";
 import {
+  ArrowRight,
   ArrowUpRight,
   BadgeCheck,
-  BriefcaseBusiness,
   Building2,
+  CheckCircle2,
+  ChevronRight,
   Code2,
   Download,
   GraduationCap,
-  Mail,
-  Palette,
-  Sparkles,
-  MapPin,
-  Filter,
-  ExternalLink,
-  Menu,
-  X,
-  Layers3,
-  PenTool,
   Home as HomeIcon,
-  UserRound,
-  Phone,
-  Globe,
-  Star,
-  CheckCircle2,
-  Clock3,
-  Target,
-  Eye,
-  FileText,
+  Image as ImageIcon,
+  Languages,
   Laptop,
+  Mail,
+  MapPin,
+  Menu,
+  Palette,
+  PenTool,
+  Phone,
   ShieldCheck,
+  Sparkles,
+  Target,
+  UserRound,
+  X,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
+type IconType = React.ComponentType<{ className?: string }>;
+type WorkTypeId = "graphic" | "realestate" | "developer";
+
+const CV_HREF = "/lance-jiro-tacsagon-cv.pdf";
+
+const fadeIn = {
+  hidden: { opacity: 0, y: 18 },
   visible: { opacity: 1, y: 0 },
 };
 
@@ -47,30 +47,132 @@ const stagger = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.08,
+      staggerChildren: 0.07,
     },
   },
 };
 
 const navItems = [
-  { label: "Work", href: "#work" },
-  { label: "Skills", href: "#skills" },
-  { label: "Certificates", href: "#certificates" },
-  { label: "Experience", href: "#experience" },
+  { label: "Portfolio View", href: "#portfolio-view" },
   { label: "About", href: "#about" },
+  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects", href: "#projects" },
+  { label: "Achievements", href: "#achievements" },
   { label: "Contact", href: "#contact" },
 ];
-const CV_HREF = "/lance-jiro-tacsagon-cv.pdf";
-const filters = ["All", "Technology", "Design", "Real Estate"];
 
-const workItems = [
+const workTypes: Array<{
+  id: WorkTypeId;
+  label: string;
+  shortLabel: string;
+  icon: IconType;
+  eyebrow: string;
+  headline: string;
+  description: string;
+  focus: string[];
+  reviewOrder: string[];
+  stats: [string, string][];
+  tone: string;
+  bestFor: string;
+  accent: string;
+  accentSoft: string;
+  activeText: string;
+  surface: string;
+  darkSurface: string;
+}> = [
+  {
+    id: "graphic",
+    label: "Graphic Design",
+    shortLabel: "Design",
+    icon: Palette,
+    eyebrow: "Visual identity, layouts, and campaign materials",
+    headline: "Creative work built for readable, client-ready visual communication.",
+    description:
+      "A focused view of posters, social media graphics, marketing materials, branding assets, and freelance design experience from 2018 to present.",
+    focus: ["Poster design", "Social media graphics", "Marketing materials", "Branding assets"],
+    reviewOrder: ["Featured graphics", "Freelance design background", "Design and editing skills"],
+    stats: [
+      ["8+ years", "freelance design practice"],
+      ["10", "design entries in the gallery"],
+      ["Print + digital", "visual output range"],
+    ],
+    tone: "Visual, campaign-ready, detail-oriented",
+    bestFor: "Creative teams, content roles, brand work, and freelance design clients",
+    accent: "bg-violet-600",
+    accentSoft: "bg-violet-50 text-violet-700 ring-violet-100",
+    activeText: "text-violet-700",
+    surface: "bg-violet-50/70",
+    darkSurface: "from-violet-950 via-slate-950 to-slate-950",
+  },
+  {
+    id: "realestate",
+    label: "Real Estate Marketing",
+    shortLabel: "Property",
+    icon: Building2,
+    eyebrow: "Property marketing, client trust, and listing presentation",
+    headline: "Real estate materials that make property information easier to trust and scan.",
+    description:
+      "A practical view of listing content, property presentations, client follow-up, and marketing visuals for real estate work.",
+    focus: ["Listing content", "Property presentations", "Client follow-up", "Digital marketing"],
+    reviewOrder: ["Real estate samples", "Filipino Homes role", "Communication and marketing skills"],
+    stats: [
+      ["2026–Present", "real estate marketing"],
+      ["4", "property sample entries"],
+      ["Client-first", "presentation approach"],
+    ],
+    tone: "Trust-building, organized, presentation-focused",
+    bestFor: "Brokerage teams, property clients, listing support, and marketing assistance",
+    accent: "bg-emerald-600",
+    accentSoft: "bg-emerald-50 text-emerald-700 ring-emerald-100",
+    activeText: "text-emerald-700",
+    surface: "bg-emerald-50/70",
+    darkSurface: "from-emerald-950 via-slate-950 to-slate-950",
+  },
+  {
+    id: "developer",
+    label: "Web / Mobile Development",
+    shortLabel: "Development",
+    icon: Code2,
+    eyebrow: "Responsive builds, APIs, IT support, and systems thinking",
+    headline: "A recruiter-friendly technical view with projects, systems work, and credentials.",
+    description:
+      "A structured view of web/mobile development, PHP and custom APIs, IT support, cybersecurity exposure, and technical project work.",
+    focus: ["Web development", "Mobile development", "PHP and APIs", "IT support"],
+    reviewOrder: ["Web projects", "Internship and freelance work", "Certifications and technical skills"],
+    stats: [
+      ["2026", "BSIT completion"],
+      ["15%", "reported system issue reduction"],
+      ["CCNA", "networking foundation"],
+    ],
+    tone: "Structured, technical, hiring-team friendly",
+    bestFor: "Developer roles, IT support roles, internships, junior tech positions, and project-based builds",
+    accent: "bg-blue-700",
+    accentSoft: "bg-blue-50 text-blue-700 ring-blue-100",
+    activeText: "text-blue-700",
+    surface: "bg-blue-50/70",
+    darkSurface: "from-blue-950 via-slate-950 to-slate-950",
+  },
+];
+
+const workItems: Array<{
+  title: string;
+  category: string;
+  workTypes: WorkTypeId[];
+  role: string;
+  tools: string;
+  description: string;
+  year: string;
+  status: string;
+  image: string;
+}> = [
   {
     title: "Graphic Artwork 01",
     category: "Design",
-    role: "Graphic Artist",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
     tools: "Photoshop",
-    description:
-      "A selected graphic design output focused on clean composition, visual balance, and clear presentation.",
+    description: "A selected design output focused on clean composition, visual balance, and clear information hierarchy.",
     year: "2021",
     status: "Graphic Artwork",
     image: "/work/artwork-01.png",
@@ -78,10 +180,10 @@ const workItems = [
   {
     title: "Graphic Artwork 02",
     category: "Design",
-    role: "Graphic Artist",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
     tools: "Photoshop",
-    description:
-      "A visual design sample created with attention to spacing, readability, and professional creative direction.",
+    description: "A visual sample built around spacing, readability, and a polished creative direction.",
     year: "2026",
     status: "Graphic Artwork",
     image: "/work/artwork-02.png",
@@ -89,10 +191,10 @@ const workItems = [
   {
     title: "Graphic Artwork 03",
     category: "Design",
-    role: "Graphic Artist",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
     tools: "Photoshop",
-    description:
-      "A design piece that shows consistency in color, typography, and overall brand-like presentation.",
+    description: "A design piece showing consistency in color, typography, and brand-like presentation.",
     year: "2025",
     status: "Graphic Artwork",
     image: "/work/artwork-03.png",
@@ -100,10 +202,10 @@ const workItems = [
   {
     title: "Graphic Artwork 04",
     category: "Design",
-    role: "Graphic Artist",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
     tools: "Photoshop",
-    description:
-      "A social media-ready creative designed to communicate information clearly while keeping the layout visually engaging.",
+    description: "A social media-ready creative designed to stay readable while keeping the layout engaging.",
     year: "2024",
     status: "Graphic Artwork",
     image: "/work/artwork-04.png",
@@ -111,239 +213,518 @@ const workItems = [
   {
     title: "Graphic Artwork 05",
     category: "Design",
-    role: "Graphic Artist",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
     tools: "Photoshop",
-    description:
-      "A selected creative output that reflects my focus on detail, balance, visual clarity, and professional polish.",
+    description: "A selected creative output with emphasis on detail, balance, clarity, and professional polish.",
     year: "2026",
     status: "Graphic Artwork",
     image: "/work/artwork-05.png",
   },
   {
+    title: "Graphic Poster 06",
+    category: "Design",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
+    tools: "Photoshop / Canva",
+    description: "A campaign, event, brand, or social media layout prepared as an additional featured poster.",
+    year: "2026",
+    status: "Poster Design",
+    image: "/work/artwork-06.png",
+  },
+  {
+    title: "Graphic Poster 07",
+    category: "Design",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
+    tools: "Photoshop / Canva",
+    description: "A poster sample focused on layout range, visual direction, and stronger creative variety.",
+    year: "2026",
+    status: "Poster Design",
+    image: "/work/artwork-07.png",
+  },
+  {
+    title: "Graphic Poster 08",
+    category: "Design",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
+    tools: "Photoshop / Canva",
+    description: "A promotional or brand-focused poster sample designed for clear social media communication.",
+    year: "2026",
+    status: "Poster Design",
+    image: "/work/artwork-08.png",
+  },
+  {
+    title: "Graphic Poster 09",
+    category: "Design",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
+    tools: "Photoshop / Canva",
+    description: "A polished visual sample focused on readability, spacing, and clear design hierarchy.",
+    year: "2026",
+    status: "Poster Design",
+    image: "/work/artwork-09.png",
+  },
+  {
+    title: "Graphic Poster 10",
+    category: "Design",
+    workTypes: ["graphic"],
+    role: "Freelance Graphic Designer",
+    tools: "Photoshop / Canva",
+    description: "A final featured graphic or campaign piece for a stronger design gallery.",
+    year: "2026",
+    status: "Poster Design",
+    image: "/work/artwork-10.png",
+  },
+  {
     title: "Personal Portfolio Website",
     category: "Technology",
+    workTypes: ["developer"],
     role: "Front-End Developer",
     tools: "React, Tailwind CSS, Vercel",
-    description:
-      "A personal portfolio website built to present my work, certificates, background, and contact details in one clean space.",
+    description: "A responsive portfolio website built to present work, certificates, background, and contact details in one digital space.",
     year: "2026",
     status: "Web Project",
     image: "/work/portfolio-website.png",
   },
   {
-  title: "ICTC Talisay Website",
-  category: "Technology",
-  role: "Web Developer / Front-End and Back-End Developer",
-  tools: "HTML 5, PHP, SQL",
-  description:
-    "A website project created for ICTC Talisay, focused on presenting information in a clean, organized, and easy-to-browse layout.",
-  year: "2026",
-  status: "Web Commission",
-  image: "/work/portfolio-website-02.png",
+    title: "ICTC Talisay Website",
+    category: "Technology",
+    workTypes: ["developer"],
+    role: "Web Developer / Front-End and Back-End Developer",
+    tools: "HTML5, PHP, SQL",
+    description: "A website project created for ICTC Talisay, focused on organized information, clean structure, and easier browsing.",
+    year: "2026",
+    status: "Web Commission",
+    image: "/work/portfolio-website-02.png",
   },
   {
-    title: "Real Estate Presentation Sample",
+    title: "Web Sample 03",
+    category: "Technology",
+    workTypes: ["developer"],
+    role: "Web / Mobile Developer",
+    tools: "TypeScript, APIs, Responsive UI",
+    description: "A third web or mobile project sample for presenting one more technical build.",
+    year: "2026",
+    status: "Web Project",
+    image: "/work/portfolio-website-03.png",
+  },
+  {
+    title: "Real Estate Presentation 01",
     category: "Real Estate",
+    workTypes: ["realestate"],
     role: "Real Estate Marketing Agent / Designer",
     tools: "Canva, Photoshop",
-    description:
-      "A real estate marketing sample focused on making property information easier to understand and present to clients.",
+    description: "A real estate marketing sample focused on making property information easier to understand and present to clients.",
     year: "2026",
-    status: "Real Estate",
+    status: "Property Sample",
     image: "/work/real-estate-sample.png",
+  },
+  {
+    title: "Real Estate Presentation 02",
+    category: "Real Estate",
+    workTypes: ["realestate"],
+    role: "Real Estate Marketing Agent / Designer",
+    tools: "Canva, Photoshop",
+    description: "A listing layout, sales post, or presentation material for real estate marketing.",
+    year: "2026",
+    status: "Property Material",
+    image: "/work/real-estate-sample-02.png",
+  },
+  {
+    title: "Real Estate Presentation 03",
+    category: "Real Estate",
+    workTypes: ["realestate"],
+    role: "Real Estate Marketing Agent / Designer",
+    tools: "Canva, Photoshop",
+    description: "A property marketing sample showing variety in listing visuals and client-facing content.",
+    year: "2026",
+    status: "Property Material",
+    image: "/work/real-estate-sample-03.png",
+  },
+  {
+    title: "Real Estate Presentation 04",
+    category: "Real Estate",
+    workTypes: ["realestate"],
+    role: "Real Estate Marketing Agent / Designer",
+    tools: "Canva, Photoshop",
+    description: "A sales-oriented real estate layout designed to make property information easier to present.",
+    year: "2026",
+    status: "Property Material",
+    image: "/work/real-estate-sample-04.png",
   },
 ];
 
-const certificates = [
+const certificates: Array<{
+  title: string;
+  issuer: string;
+  year: string;
+  note: string;
+  image?: string;
+  workTypes: WorkTypeId[];
+}> = [
   {
     title: "Seniors’ Exit Seminar",
     issuer: "Career Development Centre",
     year: "2026",
-    note: "Added to my interest in future decision making for my future and career.",
+    note: "Career preparation and transition seminar for graduating students.",
     image: "/certificates/certificate-01.jpg",
+    workTypes: ["graphic", "realestate", "developer"],
   },
   {
     title: "Internship Completion Certificate",
     issuer: "Vallacar Transit Inc.",
-    year: "2025",
-    note: "Applied all my learnings and knowledge for this 600 hours on-the-job training for Vallacar Transit in their MSIT office.",
+    year: "2026",
+    note: "IT internship work involving support, hardware concerns, and branch data coordination.",
     image: "/certificates/certificate-02.jpg",
+    workTypes: ["developer"],
   },
   {
     title: "CCNA: Switching, Routing, and Wireless Essentials",
     issuer: "Cisco Networking Academy",
     year: "2025",
-    note: "Supports my background in networking, routing, switching, wireless basics, and IT infrastructure concepts.",
+    note: "Networking foundation in routing, switching, wireless basics, and IT infrastructure.",
     image: "/certificates/certificate-03.jpg",
+    workTypes: ["developer"],
+  },
+  {
+    title: "Cybersecurity for National Security",
+    issuer: "Cybersecurity Activity",
+    year: "2025",
+    note: "Additional cybersecurity exposure connected to awareness, responsibility, and digital protection.",
+    workTypes: ["developer"],
+  },
+  {
+    title: "Endpoint Security",
+    issuer: "Cybersecurity Training",
+    year: "2025",
+    note: "Added knowledge in securing devices, endpoints, and basic cyber hygiene practices.",
+    workTypes: ["developer"],
+  },
+  {
+    title: "The Human Firewall: Cybersecurity Awareness Bacolod",
+    issuer: "Cybersecurity Awareness Program",
+    year: "2025",
+    note: "Focused on user awareness, safer online behavior, and the human side of cybersecurity.",
+    workTypes: ["developer"],
   },
 ];
 
-const lenses = [
-  {
-    icon: Code2,
-    title: "Technology",
-    description:
-      "Technology driven youngster, I am into web and mobile development. Hardware and user support is also part of my capabilities.",
-  },
-  {
-    icon: Palette,
-    title: "Design",
-    description:
-      "Design made me realize what technology could offer 8 years ago. I do layouts for almost 7 years, and worked with many professionals and well-known organizations.",
-  },
-  {
-    icon: Building2,
-    title: "Real Estate",
-    description:
-      "Real estate helped me become more careful with details, presentation, and how information is shown to clients. It also made my communication and connection to other clients better",
-  },
-];
-
-const profileTabs = [
-  {
-    id: "it",
-    label: "IT Support",
-    icon: Laptop,
-    title: "I like solving practical tech problems.",
-    description:
-      "My IT side comes from web development, mobile development, hardware support, user support, and working with branch data during internship.",
-    points: ["Hardware and user support", "Web and mobile development", "PHP systems and custom APIs"],
-  },
-  {
-    id: "design",
-    label: "Graphic Design",
-    icon: PenTool,
-    title: "I enjoy making visuals feel clean and organized.",
-    description:
-      "My design work focuses on social media graphics, promotional materials, branding assets, and layouts that are on-brand and look professional.",
-    points: ["Social media graphics", "Promotional content", "Branding and layout work"],
-  },
-  {
-    id: "realestate",
-    label: "Real Estate Marketing",
-    icon: Building2,
-    title: "I use design to make listings easier to trust.",
-    description:
-      "My real estate work pushed me to present property information clearly, follow up properly, and communicate with clients professionally.",
-    points: ["Property listing content", "Client communication", "Clear listing presentation"],
-  },
-];
-
-const skills = [
-  {
-    icon: Laptop,
-    title: "IT & Development",
-    items: ["Web Development", "Mobile Development", "JavaScript/TypeScript", "PHP APIs", "Research Computing", "Business Analysis"],
-  },
-  {
-    icon: ShieldCheck,
-    title: "Support & Cybersecurity",
-    items: ["IT Support", "User Support", "Network Protocols", "Endpoint Security", "Cybersecurity", "Hardware Support"],
-  },
-  {
-    icon: PenTool,
-    title: "Creative & Marketing",
-    items: ["Graphic Design", "Video Editing", "Social Media Graphics", "Branding Assets", "Property Marketing", "Project Management"],
-  },
-];
-
-const services = [
-  {
-    icon: Layers3,
-    title: "Website and Mobile Development",
-    description:
-      "Clean, modern web and mobile pages that present information, data, and details clearly and professionally.",
-  },
-  {
-    icon: Palette,
-    title: "Graphic Design Assets",
-    description:
-      "Social media creatives, listing visuals, posters, layouts, and simple brand materials.",
-  },
-  {
-    icon: HomeIcon,
-    title: "Real Estate Listings",
-    description:
-      "Property listing visuals and client-facing selling materials built around clarity and trust.",
-  },
-];
-
-const experience = [
-  {
-    period: "Jan 2026 - Apr 2026",
-    type: "Internship",
-    title: "IT Intern",
-    place: "Vallacar Transit Inc.",
-    description:
-      "Provided IT and hardware support across different offices while coordinating with programmers on branch data.",
-    highlights: ["IT support", "Hardware support", "Branch data coordination"],
-  },
-  {
-    period: "Jul 2025 - Jan 2026",
-    type: "Creative Role",
-    title: "Lead Graphic Artist",
-    place: "Lokal Folks Collective",
-    description:
-      "Designed social media graphics, promotional content, branding assets, and other visual materials for different teams and projects.",
-    highlights: ["Social media graphics", "Branding assets", "Promotional content"],
-  },
+const experience: Array<{
+  period: string;
+  type: string;
+  title: string;
+  place: string;
+  description: string;
+  highlights: string[];
+  workTypes: WorkTypeId[];
+}> = [
   {
     period: "Jan 2026 - Present",
     type: "Real Estate",
     title: "Real Estate Marketing Agent",
     place: "Filipino Homes",
-    description:
-      "Created digital marketing content for real estate listings, helped present property information in a clearer, more client-friendly way, and sell properties with trust and confidence.",
-    highlights: ["Property marketing", "Client communication", "Listing presentation"],
+    description: "Develops digital marketing content for real estate listings, improves property presentations, and supports client relationships through communication and follow-up.",
+    highlights: ["Listing content", "Property presentation", "Client follow-up"],
+    workTypes: ["realestate", "graphic"],
+  },
+  {
+    period: "Nov 2025 - Present",
+    type: "Freelance",
+    title: "Freelance Website Developer",
+    place: "Independent Projects",
+    description: "Designs, develops, and deploys responsive web applications while improving online presence, performance, and integrations through APIs and third-party services.",
+    highlights: ["Responsive web apps", "Performance optimization", "RESTful APIs"],
+    workTypes: ["developer"],
+  },
+  {
+    period: "Jan 2026 - Apr 2026",
+    type: "Internship",
+    title: "IT Intern",
+    place: "Vallacar Transit Inc.",
+    description: "Provided IT and hardware support across different offices, coordinated with programmers on branch data, and contributed to fewer system issues.",
+    highlights: ["Hardware support", "Branch data coordination", "System troubleshooting"],
+    workTypes: ["developer"],
+  },
+  {
+    period: "Jan 2018 - Present",
+    type: "Freelance",
+    title: "Freelance Graphic Designer",
+    place: "Independent Clients",
+    description: "Created social media graphics, marketing materials, branding assets, creative layouts, and visual concepts tailored to client needs and brand identity while managing multiple projects and deadlines.",
+    highlights: ["Social media graphics", "Marketing materials", "Branding assets", "Client-ready layouts"],
+    workTypes: ["graphic", "realestate"],
+  },
+  {
+    period: "2024 - 2025",
+    type: "Editorial Design",
+    title: "The La Salle Yearbook Layout Artist",
+    place: "The La Salle Yearbook",
+    description: "Created layout work for yearbook pages with attention to clean composition, photo placement, typography, and organized editorial presentation.",
+    highlights: ["Yearbook layout", "Editorial composition", "Photo placement", "Typography"],
+    workTypes: ["graphic"],
+  },
+  {
+    period: "2023 - 2024",
+    type: "Publication Leadership",
+    title: "The Howl Editor-In-Chief",
+    place: "The Howl",
+    description: "Led publication work as Editor-In-Chief, supporting editorial direction, visual consistency, content organization, and team output.",
+    highlights: ["Editorial leadership", "Content direction", "Publication design", "Team coordination"],
+    workTypes: ["graphic"],
+  },
+  {
+    period: "2022 - 2023",
+    type: "Layout Design",
+    title: "Rektikano Layout Artist",
+    place: "Rektikano",
+    description: "Produced layout artist work for publication materials, focusing on structure, readability, spacing, and page presentation.",
+    highlights: ["Layout design", "Publication materials", "Readability", "Visual structure"],
+    workTypes: ["graphic"],
   },
   {
     period: "Jul 2022 - Apr 2026",
     type: "Education",
     title: "BS Information Technology",
     place: "University of St. La Salle - Bacolod",
-    description:
-      "Studied web development, mobile development, and netowrking, with capstone work involving PHP-based systems and custom APIs.",
-    highlights: ["Web development", "Mobile development", "PHP APIs"],
+    description: "Completed BS Information Technology with relevant coursework in web development and mobile development, plus capstone work involving PHP-based systems and custom APIs.",
+    highlights: ["Web development", "Mobile development", "PHP custom APIs"],
+    workTypes: ["developer"],
   },
 ];
 
-const principles = [
+const skillGroups: Array<{
+  title: string;
+  icon: IconType;
+  workTypes: WorkTypeId[];
+  items: string[];
+}> = [
   {
-    icon: Eye,
-    title: "Clarity first",
-    description: "Client should envisioned the project clearl, I want them to understand what I do without overthinking it.",
+    title: "Development & Systems",
+    icon: Laptop,
+    workTypes: ["developer"],
+    items: ["Web Development", "Mobile Development", "TypeScript Stack", "PHP APIs", "RESTful APIs", "Business Analysis"],
+  },
+  {
+    title: "IT Support & Security",
+    icon: ShieldCheck,
+    workTypes: ["developer"],
+    items: ["IT Support", "User Support", "Hardware Support", "Network Protocols", "Endpoint Security", "Cybersecurity"],
+  },
+  {
+    title: "Graphic Design & Editing",
+    icon: PenTool,
+    workTypes: ["graphic", "realestate"],
+    items: ["Graphic Design", "Video Editing", "Social Media Graphics", "Promotional Layouts", "Branding Assets", "Project Management"],
+  },
+  {
+    title: "Real Estate Marketing",
+    icon: HomeIcon,
+    workTypes: ["realestate", "graphic"],
+    items: ["Listing Content", "Property Presentation", "Client Communication", "Digital Marketing", "Follow-up Support", "Visual Selling Materials"],
+  },
+];
+
+const landingStats = [
+  {
+    value: "8+ years",
+    label: "Freelance design practice",
+    note: "Jan 2018–Present creating social graphics, marketing materials, and branding assets.",
+  },
+  {
+    value: "15%",
+    label: "Reported system issue reduction",
+    note: "Contribution during IT and hardware support work at Vallacar Transit Inc.",
+  },
+  {
+    value: "5",
+    label: "Languages for communication",
+    note: "English, Tagalog, Bisaya, Hiligaynon, and Japanese.",
+  },
+  {
+    value: "2026",
+    label: "BSIT completion year",
+    note: "Web/mobile coursework with capstone work using PHP-based systems and custom APIs.",
+  },
+];
+
+const proofItems = [
+  {
+    icon: GraduationCap,
+    label: "Dean’s Lister",
+    value: "2021 - 2023",
+    note: "Academic achievement recognition.",
   },
   {
     icon: Target,
-    title: "Purposeful details",
-    description: "Spacing, labels, and layout matter because they make the work feel more finished and the project understandable.",
+    label: "Capstone Project Lead",
+    value: "2025 - 2026",
+    note: "Led capstone work involving PHP-based systems and custom APIs.",
   },
   {
-    icon: Clock3,
-    title: "Simple but polished",
-    description: "I do not want the project to feel overloaded. I want it to feel direct and easy to grasp while looking professional and neat.",
+    icon: Languages,
+    label: "Languages",
+    value: "English, Tagalog, Bisaya, Hiligaynon, Japanese",
+    note: "Useful for local clients, team communication, and wider collaboration.",
   },
 ];
 
-type SectionLabelProps = {
-  icon: React.ComponentType<{ className?: string }>;
-  children: React.ReactNode;
-};
+function SmartImage({
+  src,
+  alt,
+  sizes,
+  className,
+  priority = false,
+  fallbackLabel,
+}: {
+  src: string;
+  alt: string;
+  sizes: string;
+  className?: string;
+  priority?: boolean;
+  fallbackLabel?: string;
+}) {
+  const [hasError, setHasError] = useState(false);
 
-function SectionLabel({ icon: Icon, children }: SectionLabelProps) {
+  if (hasError) {
+    return (
+      <div className="absolute inset-0 flex items-center justify-center bg-[radial-gradient(circle_at_top_left,#eff6ff,transparent_42%),linear-gradient(135deg,#f8fafc,#ffffff)] px-6 text-center">
+        <div>
+          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-700 text-white shadow-lg shadow-blue-700/20">
+            <ImageIcon className="h-5 w-5" />
+          </div>
+          <p className="text-sm font-semibold text-slate-800">{fallbackLabel ?? alt}</p>
+          <p className="mt-1 text-xs text-slate-400">Image preview coming soon</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <p className="mb-3 flex items-center gap-2 text-sm font-medium uppercase tracking-[0.22em] text-amber-300">
-      <Icon className="h-4 w-4" />
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes={sizes}
+      className={className}
+      priority={priority}
+      onError={() => setHasError(true)}
+    />
+  );
+}
+
+function SectionHeader({
+  eyebrow,
+  title,
+  description,
+  index,
+  align = "split",
+  inverted = false,
+}: {
+  eyebrow: string;
+  title: string;
+  description?: string;
+  index: string;
+  align?: "split" | "center";
+  inverted?: boolean;
+}) {
+  return (
+    <div className={`mx-auto mb-10 max-w-7xl ${align === "center" ? "text-center" : "grid gap-6 lg:grid-cols-[0.78fr_1fr] lg:items-end"}`}>
+      <div>
+        <div className={`mb-4 inline-flex items-center gap-3 rounded-full border px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] ${inverted ? "border-white/10 bg-white/[0.06] text-sky-200" : "border-blue-100 bg-blue-50 text-blue-700"}`}>
+          <span>{index}</span>
+          <span className={`h-1 w-1 rounded-full ${inverted ? "bg-sky-200" : "bg-blue-700"}`} />
+          <span>{eyebrow}</span>
+        </div>
+        <h2 className={`text-balance text-3xl font-semibold tracking-[-0.035em] md:text-5xl ${inverted ? "text-white" : "text-slate-950"}`}>{title}</h2>
+      </div>
+      {description && (
+        <p className={`max-w-2xl text-base leading-8 ${align === "center" ? "mx-auto mt-5" : "lg:ml-auto"} ${inverted ? "text-white/65" : "text-slate-600"}`}>
+          {description}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function MetaPill({ children, active = false }: { children: React.ReactNode; active?: boolean }) {
+  return (
+    <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${active ? "border-blue-200 bg-blue-50 text-blue-700" : "border-slate-200 bg-white text-slate-600"}`}>
       {children}
-    </p>
+    </span>
+  );
+}
+
+function ProjectCard({ item, featured = false, onPreview }: { item: (typeof workItems)[number]; featured?: boolean; onPreview: () => void }) {
+  return (
+    <motion.article layout variants={fadeIn} className="h-full">
+      <Card className={`group h-full overflow-hidden border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-2xl hover:shadow-slate-950/[0.08] ${featured ? "rounded-[2rem]" : "rounded-[1.5rem]"}`}>
+        <CardContent className="h-full p-0">
+          <div className={featured ? "grid h-full lg:grid-cols-[1.1fr_0.9fr]" : "flex h-full flex-col"}>
+            <button type="button" onClick={onPreview} className={`relative overflow-hidden bg-slate-100 text-left ${featured ? "min-h-[30rem] lg:min-h-full" : "h-64"}`}>
+              <SmartImage
+                src={item.image}
+                alt={item.title}
+                sizes={featured ? "(max-width: 1024px) 100vw, 55vw" : "(max-width: 768px) 100vw, 33vw"}
+                className="object-cover transition duration-700 group-hover:scale-[1.035]"
+                fallbackLabel={item.title}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-950/10 to-transparent" />
+              <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between gap-3">
+                <div className="flex flex-wrap gap-2">
+                  <span className="rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">{item.category}</span>
+                  <span className="rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md">{item.year}</span>
+                </div>
+                <span className="hidden rounded-full border border-white/20 bg-white/15 px-3 py-1 text-xs font-semibold text-white backdrop-blur-md sm:inline-flex">
+                  Preview
+                </span>
+              </div>
+            </button>
+
+            <div className={`flex flex-1 flex-col ${featured ? "p-7 md:p-9" : "p-6"}`}>
+              <div className="mb-5 flex flex-wrap gap-2">
+                <MetaPill active>{item.status}</MetaPill>
+                <MetaPill>{item.tools}</MetaPill>
+              </div>
+              <h3 className={`font-semibold tracking-[-0.025em] text-slate-950 ${featured ? "text-3xl md:text-4xl" : "text-xl"}`}>{item.title}</h3>
+              <p className="mt-4 leading-7 text-slate-600">{item.description}</p>
+
+              <div className={`mt-6 grid gap-3 border-t border-slate-100 pt-5 text-sm ${featured ? "sm:grid-cols-3" : ""}`}>
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Role</p>
+                  <p className="mt-1 font-semibold text-slate-800">{item.role}</p>
+                </div>
+                {featured && (
+                  <>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Tools</p>
+                      <p className="mt-1 font-semibold text-slate-800">{item.tools}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Year</p>
+                      <p className="mt-1 font-semibold text-slate-800">{item.year}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <button type="button" onClick={onPreview} className="mt-auto inline-flex items-center gap-2 pt-7 text-sm font-semibold text-blue-700 transition group-hover:gap-3">
+                View sample
+                <ArrowUpRight className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </motion.article>
   );
 }
 
 export default function LanceJiroTacsagonPortfolioWebsite() {
-  const [activeFilter, setActiveFilter] = useState("All");
+  const [activeWorkType, setActiveWorkType] = useState<WorkTypeId>("developer");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeProfile, setActiveProfile] = useState("it");
   const [selectedWork, setSelectedWork] = useState<(typeof workItems)[number] | null>(null);
+  const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 140,
@@ -351,601 +732,554 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
     restDelta: 0.001,
   });
 
-  const selectedProfile =
-    profileTabs.find((profile) => profile.id === activeProfile) ?? profileTabs[0];
+  const active = workTypes.find((type) => type.id === activeWorkType) ?? workTypes[0];
+  const ActiveIcon = active.icon;
+  const activeWork = useMemo(() => workItems.filter((item) => item.workTypes.includes(activeWorkType)), [activeWorkType]);
+  const activeExperience = useMemo(() => experience.filter((item) => item.workTypes.includes(activeWorkType)), [activeWorkType]);
+  const activeSkills = useMemo(() => skillGroups.filter((group) => group.workTypes.includes(activeWorkType)), [activeWorkType]);
+  const activeCertificates = useMemo(() => certificates.filter((cert) => cert.workTypes.includes(activeWorkType)), [activeWorkType]);
+  const featuredWork = activeWork[0];
+  const secondaryWork = activeWork.slice(1);
 
-  const filteredWork = useMemo(() => {
-    if (activeFilter === "All") return workItems;
-    return workItems.filter((item) => item.category === activeFilter);
-  }, [activeFilter]);
+  const motionProps = prefersReducedMotion
+    ? {}
+    : {
+        initial: "hidden" as const,
+        whileInView: "visible" as const,
+        viewport: { once: true, margin: "-80px" },
+        variants: stagger,
+      };
 
   return (
-    <main className="min-h-screen scroll-smooth bg-neutral-950 font-sans text-neutral-100 antialiased selection:bg-amber-300 selection:text-neutral-950">
-      <motion.div
-        style={{ scaleX }}
-        className="fixed left-0 top-0 z-[70] h-1 w-full origin-left bg-amber-300"
-      />
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-[-20rem] h-[38rem] w-[38rem] -translate-x-1/2 rounded-full bg-amber-300/10 blur-3xl" />
-        <div className="absolute bottom-[-16rem] right-[-10rem] h-[32rem] w-[32rem] rounded-full bg-white/5 blur-3xl" />
-      </div>
+    <main className="min-h-screen scroll-smooth bg-[#f7f9fc] font-sans text-slate-950 antialiased selection:bg-blue-700 selection:text-white">
+      <motion.div style={{ scaleX }} className="fixed left-0 top-0 z-[80] h-1 w-full origin-left bg-blue-700" />
 
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-neutral-950/75 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
-          <a href="#top" className="group flex items-center gap-2" onClick={() => setMenuOpen(false)}>
-            <div className="flex h-9 w-9 items-center justify-center rounded-2xl border border-white/15 bg-white/5 shadow-sm">
-              <Sparkles className="h-4 w-4 text-amber-300" />
-            </div>
-            <span className="text-sm font-semibold tracking-wide text-white">Lance Jiro Tacsagon</span>
+      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8" aria-label="Main navigation">
+          <a href="#top" onClick={() => setMenuOpen(false)} className="group flex items-center gap-3">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-950 text-white shadow-sm transition duration-300 group-hover:scale-105">
+              <Sparkles className="h-4 w-4" />
+            </span>
+            <span>
+              <span className="block text-sm font-bold tracking-tight text-slate-950">Lance Jiro Tacsagon</span>
+              <span className="block text-xs text-slate-500">Multidisciplinary portfolio</span>
+            </span>
           </a>
 
-          <div className="hidden items-center gap-7 text-sm text-neutral-400 lg:flex">
+          <div className="hidden items-center gap-1 rounded-full border border-slate-200 bg-slate-50 p-1 lg:flex">
             {navItems.map((item) => (
-              <a key={item.href} href={item.href} className="transition hover:text-white">
+              <a key={item.href} href={item.href} className="rounded-full px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-blue-700 hover:shadow-sm">
                 {item.label}
               </a>
             ))}
           </div>
 
-          <button
-            onClick={() => setMenuOpen((value) => !value)}
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 lg:hidden"
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
-        </nav>
-
-        {menuOpen && (
-        <div className="border-t border-white/10 bg-neutral-950/95 px-6 py-4 lg:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-2">
-            {navItems.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="rounded-2xl px-4 py-3 text-sm text-neutral-300 transition hover:bg-white/5 hover:text-white"
-              >
-                {item.label}
-              </a>
-            ))}
-
+          <div className="hidden items-center gap-3 lg:flex">
+            <a href="mailto:re.lancejirotacsagon@gmail.com" className="text-sm font-semibold text-slate-600 transition hover:text-blue-700">
+              Email
+            </a>
             <a
               href={CV_HREF}
               download
-              className="mt-2 inline-flex items-center justify-center rounded-full bg-white px-5 py-3 text-sm font-medium text-neutral-950 transition hover:bg-amber-200"
+              className="inline-flex h-10 items-center justify-center rounded-full bg-blue-700 px-5 text-sm font-semibold text-white shadow-sm shadow-blue-700/20 transition hover:bg-blue-600"
             >
               Download CV
               <Download className="ml-2 h-4 w-4" />
             </a>
           </div>
-        </div>
-      )}
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((value) => !value)}
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm lg:hidden"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </nav>
+
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              className="overflow-hidden border-t border-slate-200 bg-white lg:hidden"
+            >
+              <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-4">
+                {navItems.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                <a
+                  href={CV_HREF}
+                  download
+                  className="mt-2 inline-flex items-center justify-center rounded-full bg-blue-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-600"
+                >
+                  Download CV
+                  <Download className="ml-2 h-4 w-4" />
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
 
-      <section id="top" className="relative mx-auto max-w-7xl px-6 pb-20 pt-24 lg:px-8 lg:pb-28 lg:pt-32">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-          className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center"
-        >
-          <div>
-            <motion.div variants={fadeUp} className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-neutral-300">
-              <MapPin className="h-4 w-4 text-amber-300" />
-              Bacolod City, Philippines
-            </motion.div>
+      <section id="top" className="relative isolate overflow-hidden border-b border-slate-200 bg-white px-5 py-8 lg:px-8 lg:py-10">
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent" />
+          <div className="absolute left-1/2 top-0 h-[42rem] w-[42rem] -translate-x-1/2 rounded-full bg-blue-50 blur-3xl" />
+          <div className="absolute bottom-0 right-[-10rem] h-[24rem] w-[24rem] rounded-full bg-sky-100/70 blur-3xl" />
+        </div>
 
-            <motion.h1 variants={fadeUp} className="max-w-4xl text-5xl font-semibold tracking-tight text-white md:text-7xl">
-              Design-minded IT graduate, blending technology and creative tools for making impactful technology and digital solutions.
-            </motion.h1>
-
-            <motion.p variants={fadeUp} className="mt-7 max-w-2xl text-lg leading-8 text-neutral-300">
-              I’m Lance Jiro Tacsagon, a fresh IT graduate from University of St. La Salle - Bacolod. I work across graphic design, web projects, and real estate, so this site brings those sides together in one place.
-            </motion.p>
-
-            <motion.div variants={fadeUp} className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Button asChild className="h-12 rounded-full bg-amber-300 px-7 text-neutral-950 hover:bg-amber-200">
-                <a href="#work">
-                  View my work
-                  <ArrowUpRight className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-              <Button asChild variant="outline" className="h-12 rounded-full border-white/15 bg-white/5 px-7 text-white hover:bg-white/10 hover:text-white">
-                <a href="#contact">
-                  Contact me
-                  <Mail className="ml-2 h-4 w-4" />
-                </a>
-              </Button>
-            </motion.div>
-
-            <motion.div variants={fadeUp} className="mt-10 grid max-w-xl grid-cols-3 gap-3">
-              {[
-                ["5", "Graphic works"],
-                ["3", "Certificates"],
-                ["2", "Web Projects"],
-              ].map(([value, label]) => (
-                <div key={label} className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                  <p className="text-2xl font-semibold text-white">{value}</p>
-                  <p className="mt-1 text-xs text-neutral-500">{label}</p>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-
-          <motion.div variants={fadeUp} className="relative">
-            <div className="overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.04] p-4 shadow-2xl backdrop-blur">
-              <div className="relative h-80 overflow-hidden rounded-[1.5rem] border border-white/10 bg-neutral-900">
-                <Image
-                  src="/profile/lance.jpg"
-                  alt="Lance Jiro Tacsagon"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                  style={{ objectPosition: "center 10%" }}
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-neutral-950/10 to-transparent" />
-
-                <div className="absolute bottom-5 left-5 right-5">
-                  <p className="text-sm text-amber-300">BSIT Graduate</p>
-                  <h2 className="mt-1 text-2xl font-medium text-white">
-                    Lance Jiro Tacsagon
-                  </h2>
-                  <p className="mt-2 text-sm leading-6 text-neutral-300">
-                    IT support, Graphic Designer,Web & Mobile Dev, and Real Estate Agent.
-                  </p>
-                </div>
+        <motion.div initial="hidden" animate="visible" variants={stagger} className="mx-auto max-w-7xl">
+          <div className="grid gap-8 lg:min-h-[calc(100svh-6rem)] lg:grid-cols-[1.08fr_0.82fr] lg:items-center">
+            <motion.div variants={fadeIn}>
+              <div className="mb-6 flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-sm">
+                  <MapPin className="h-4 w-4 text-blue-700" />
+                  Bacolod City, Philippines
+                </span>
+                <span className="inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm">
+                  <BadgeCheck className="h-4 w-4" />
+                  Open to opportunities
+                </span>
               </div>
 
-              <div className="mt-4 rounded-[1.5rem] border border-white/10 bg-neutral-900 p-5">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                  <div>
-                    <p className="text-sm text-neutral-400">What this site shows</p>
-                    <p className="font-medium text-white">
-                      Design, web projects, and real estate work
-                    </p>
-                  </div>
+              <p className="mb-5 text-sm font-bold uppercase tracking-[0.28em] text-blue-700">Portfolio for hiring teams and clients</p>
+              <h1 className="max-w-5xl text-balance text-5xl font-semibold tracking-[-0.065em] text-slate-950 md:text-6xl lg:text-7xl">
+                Design clarity. Real estate presentation. Technical execution.
+              </h1>
+              <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
+                A focused portfolio for Lance Jiro Tacsagon, connecting freelance graphic design, property marketing, web/mobile development, and IT support in one organized review experience.
+              </p>
 
-                  <div className="rounded-full bg-amber-300/15 p-3">
-                    <BadgeCheck className="h-5 w-5 text-amber-300" />
-                  </div>
-                </div>
-
-                <div className="mt-5 space-y-3">
-                  {[
-                    "Graphic artwork samples",
-                    "Certificates and school background",
-                    "Real estate presentation work",
-                    "Web projects I built",
-                  ].map((item) => (
-                    <div
-                      key={item}
-                      className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4"
-                    >
-                      <span className="text-sm text-neutral-200">{item}</span>
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <Button asChild className="h-12 rounded-full bg-blue-700 px-7 text-white shadow-lg shadow-blue-700/20 hover:bg-blue-600">
+                  <a href="#portfolio-view">
+                    Choose portfolio view
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
+                <Button asChild variant="outline" className="h-12 rounded-full border-slate-200 bg-white px-7 text-slate-800 hover:bg-slate-50 hover:text-blue-700">
+                  <a href={CV_HREF} download>
+                    Download CV
+                    <Download className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
               </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      </section>
+            </motion.div>
 
-      <section className="relative mx-auto max-w-7xl px-6 py-16 lg:px-8">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={stagger}
-          className="grid gap-4 md:grid-cols-3"
-        >
-          {lenses.map((lens) => {
-            const Icon = lens.icon;
-            return (
-              <motion.div key={lens.title} variants={fadeUp}>
-                <Card className="h-full rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none transition hover:-translate-y-1 hover:bg-white/[0.06]">
-                  <CardContent className="p-6">
-                    <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                      <Icon className="h-5 w-5 text-amber-300" />
-                    </div>
-                    <h3 className="text-xl font-semibold">{lens.title}</h3>
-                    <p className="mt-3 leading-7 text-neutral-400">{lens.description}</p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </motion.div>
-      </section>
-
-      <section className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="mb-8 max-w-3xl">
-          <SectionLabel icon={UserRound}>Choose a side of my work</SectionLabel>
-          <h2 className="text-4xl font-medium tracking-tight text-white md:text-5xl">
-            This portfolio is not just one thing. It connects the work I actually do.
-          </h2>
-        </div>
-
-        <div className="grid gap-5 lg:grid-cols-[0.35fr_0.65fr]">
-          <div className="grid gap-3">
-            {profileTabs.map((profile) => {
-              const Icon = profile.icon;
-              const active = activeProfile === profile.id;
-              return (
-                <button
-                  key={profile.id}
-                  type="button"
-                  onClick={() => setActiveProfile(profile.id)}
-                  className={`flex items-center gap-4 rounded-[1.5rem] border p-5 text-left transition ${
-                    active
-                      ? "border-amber-300/40 bg-amber-300 text-neutral-950"
-                      : "border-white/10 bg-white/[0.04] text-neutral-300 hover:bg-white/[0.07]"
-                  }`}
-                >
-                  <div
-                    className={`flex h-11 w-11 items-center justify-center rounded-2xl ${
-                      active ? "bg-neutral-950/10" : "bg-white/5"
-                    }`}
-                  >
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <span className="font-medium">{profile.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          <motion.div
-            key={selectedProfile.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="rounded-[2rem] border border-white/10 bg-white/[0.04] p-7 md:p-9"
-          >
-            <p className="text-sm uppercase tracking-[0.22em] text-amber-300">
-              {selectedProfile.label}
-            </p>
-            <h3 className="mt-4 text-3xl font-medium tracking-tight text-white md:text-4xl">
-              {selectedProfile.title}
-            </h3>
-            <p className="mt-5 max-w-2xl leading-8 text-neutral-400">
-              {selectedProfile.description}
-            </p>
-            <div className="mt-7 grid gap-3 md:grid-cols-3">
-              {selectedProfile.points.map((point) => (
-                <div
-                  key={point}
-                  className="rounded-2xl border border-white/10 bg-neutral-950/40 px-4 py-4 text-sm text-neutral-300"
-                >
-                  {point}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section id="work" className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div>
-            <SectionLabel icon={BriefcaseBusiness}>Selected Work</SectionLabel>
-            <h2 className="max-w-2xl text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              A quick look at my graphic works, web project, and real estate-related presentation sample.
-            </h2>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] p-2">
-            <Filter className="ml-2 h-4 w-4 text-neutral-500" />
-            {filters.map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setActiveFilter(filter)}
-                className={`rounded-full px-4 py-2 text-sm transition ${
-                  activeFilter === filter
-                    ? "bg-white text-neutral-950"
-                    : "text-neutral-400 hover:bg-white/10 hover:text-white"
-                }`}
-              >
-                {filter}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <motion.div
-          key={activeFilter}
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-          className="grid gap-5 md:grid-cols-2"
-        >
-          {filteredWork.map((item) => (
-            <motion.article key={item.title} variants={fadeUp}>
-              <Card className="group h-full overflow-hidden rounded-[2rem] border-white/10 bg-white/[0.04] text-white shadow-none">
-                <CardContent className="p-0">
-                  <div className="relative flex min-h-72 items-end overflow-hidden border-b border-white/10 bg-neutral-900 p-6">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/35 to-transparent" />
-                    <div className="relative z-10">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded-full border border-white/10 bg-neutral-950/50 px-3 py-1 text-xs text-neutral-300">
-                          {item.category}
-                        </span>
-                        <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs text-amber-200">
-                          {item.status}
-                        </span>
-                      </div>
-                      <h3 className="mt-4 text-2xl font-semibold tracking-tight text-white">
-                        {item.title}
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <p className="leading-7 text-neutral-400">{item.description}</p>
-                    <div className="mt-6 grid gap-4 text-sm sm:grid-cols-3">
-                      <div>
-                        <p className="text-neutral-500">Role</p>
-                        <p className="mt-1 text-neutral-200">{item.role}</p>
-                      </div>
-                      <div>
-                        <p className="text-neutral-500">Tools</p>
-                        <p className="mt-1 text-neutral-200">{item.tools}</p>
-                      </div>
-                      <div>
-                        <p className="text-neutral-500">Year</p>
-                        <p className="mt-1 text-neutral-200">{item.year}</p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setSelectedWork(item)}
-                      className="mt-7 inline-flex items-center gap-2 text-sm font-medium text-amber-300 transition group-hover:gap-3"
-                    >
-                      View Photo
-                      <ArrowUpRight className="h-4 w-4" />
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.article>
-          ))}
-        </motion.div>
-      </section>
-
-      <section id="skills" className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="mb-10 max-w-3xl">
-          <SectionLabel icon={Star}>Skills & Tools</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-            The tools and skills I use when working on visuals, websites, and client-facing materials.
-          </h2>
-        </div>
-
-        <div className="grid gap-4 lg:grid-cols-3">
-          {skills.map((skill) => {
-            const Icon = skill.icon;
-            return (
-              <Card key={skill.title} className="rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none">
-                <CardContent className="p-6">
-                  <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-300/15">
-                    <Icon className="h-5 w-5 text-amber-300" />
-                  </div>
-                  <h3 className="text-xl font-semibold">{skill.title}</h3>
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {skill.items.map((item) => (
-                      <span key={item} className="rounded-full border border-white/10 bg-neutral-950/50 px-3 py-2 text-sm text-neutral-300">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
-          <div>
-            <SectionLabel icon={CheckCircle2}>What I Can Help With</SectionLabel>
-            <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              What I can help with right now.
-            </h2>
-            <p className="mt-5 leading-8 text-neutral-400">
-              These are the kinds of work I can confidently show or offer while I continue building my experience.
-            </p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-1">
-            {services.map((service) => {
-              const Icon = service.icon;
-              return (
-                <Card key={service.title} className="rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none">
-                  <CardContent className="flex gap-5 p-6">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/5">
-                      <Icon className="h-5 w-5 text-amber-300" />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold">{service.title}</h3>
-                      <p className="mt-2 leading-7 text-neutral-400">{service.description}</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      <section id="certificates" className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="mb-10 max-w-3xl">
-          <SectionLabel icon={GraduationCap}>Proof of Growth</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-            Certificates that support my background and growth.
-          </h2>
-          <p className="mt-5 leading-8 text-neutral-400">
-            Long way to go since I am mostly a self taught student.
-          </p>
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {certificates.map((cert) => (
-            <Card key={cert.title} className="rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none">
-              <CardContent className="p-6">
-                <div className="relative mb-6 h-40 overflow-hidden rounded-2xl border border-white/10 bg-neutral-950">
-                  <Image
-                    src={cert.image}
-                    alt={cert.title}
-                    fill
-                    className="object-cover transition duration-500 hover:scale-105"
+            <motion.aside variants={fadeIn} className="relative lg:self-center">
+              <div className="absolute -left-5 top-10 hidden h-20 w-20 rounded-3xl border border-blue-100 bg-blue-50 shadow-sm lg:block" />
+              <div className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-2xl shadow-slate-950/[0.08]">
+                <div className="relative h-72 overflow-hidden bg-slate-950 sm:h-80 lg:h-[21rem]">
+                  <SmartImage
+                    src="/profile/lance.jpg"
+                    alt="Lance Jiro Tacsagon"
+                    sizes="(max-width: 1024px) 100vw, 34vw"
+                    className="object-cover object-center"
+                    priority
+                    fallbackLabel="Profile photo"
                   />
-                </div>
-                <p className="text-xs uppercase tracking-[0.18em] text-neutral-500">{cert.year}</p>
-                <h3 className="mt-3 text-xl font-semibold">{cert.title}</h3>
-                <p className="mt-2 text-sm text-neutral-500">{cert.issuer}</p>
-                <p className="mt-5 leading-7 text-neutral-400">{cert.note}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      <section id="experience" className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="mb-10 max-w-3xl">
-          <SectionLabel icon={FileText}>Experience</SectionLabel>
-          <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-            Building Experience Through Technology, Design, and Real Estate.
-          </h2>
-        </div>
-
-        <div className="space-y-4">
-          {experience.map((item, index) => (
-            <Card
-              key={item.title}
-              className="group rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none transition hover:bg-white/[0.06]"
-            >
-              <CardContent className="grid gap-5 p-6 md:grid-cols-[4rem_1fr] md:items-start">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-neutral-950/50 text-sm font-medium text-amber-300">
-                  {String(index + 1).padStart(2, "0")}
-                </div>
-
-                <div>
-                  <div className="mb-4 flex flex-wrap items-center gap-2">
-                    <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-medium text-amber-200">
-                      {item.type}
-                    </span>
-
-                    <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs text-neutral-400">
-                      {item.period}
-                    </span>
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/10 to-transparent" />
+                  <div className="absolute bottom-5 left-5 right-5 text-white">
+                    <p className="text-sm font-semibold text-sky-200">BS Information Technology</p>
+                    <h2 className="mt-1 text-3xl font-semibold tracking-tight">Lance Jiro Tacsagon</h2>
                   </div>
+                </div>
 
-                  <h3 className="text-2xl font-medium text-white">{item.title}</h3>
-
-                  <p className="mt-1 text-sm text-neutral-500">{item.place}</p>
-
-                  <p className="mt-4 max-w-3xl leading-8 text-neutral-400">
-                    {item.description}
-                  </p>
-
-                  <div className="mt-5 flex flex-wrap gap-2">
-                    {item.highlights.map((highlight) => (
-                      <span
-                        key={highlight}
-                        className="rounded-full border border-white/10 bg-neutral-950/40 px-3 py-2 text-xs text-neutral-300"
-                      >
-                        {highlight}
-                      </span>
+                <div className="p-5">
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Review snapshot</p>
+                      <p className="mt-2 text-base font-semibold leading-7 text-slate-950">Graphic Designer · Real Estate Marketing Agent · Web / Mobile Developer</p>
+                    </div>
+                    <span className="hidden rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-blue-700 sm:inline-flex">2026</span>
+                  </div>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {landingStats.map((stat) => (
+                      <div key={stat.label} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                        <div className="flex items-start justify-between gap-3">
+                          <p className="text-xl font-semibold tracking-tight text-slate-950">{stat.value}</p>
+                          <CheckCircle2 className="mt-1 h-4 w-4 text-blue-700" />
+                        </div>
+                        <p className="mt-1 text-xs font-semibold leading-5 text-slate-700">{stat.label}</p>
+                        <p className="mt-1 line-clamp-2 text-[11px] leading-5 text-slate-500">{stat.note}</p>
+                      </div>
                     ))}
                   </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              </div>
+            </motion.aside>
+          </div>
+        </motion.div>
       </section>
 
-      <section className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="rounded-[2.5rem] border border-white/10 bg-white/[0.04] p-8 md:p-12">
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <section id="portfolio-view" className={`border-b border-slate-200 px-5 py-10 lg:px-8 ${active.surface}`} aria-label="Portfolio view selector">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6 grid gap-5 lg:grid-cols-[0.42fr_1fr] lg:items-end">
             <div>
-              <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-amber-300">Details Matter</p>
-              <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-                I keep my work simple, professional, and properly arranged.
-              </h2>
+              <p className="text-xs font-bold uppercase tracking-[0.22em] text-blue-700">Portfolio view</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-[-0.035em] text-slate-950 md:text-4xl">Choose the review path first.</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-600">This changes the featured work, skills, experience, achievements, and visual treatment across the page.</p>
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
-              {principles.map((principle) => {
-                const Icon = principle.icon;
+            <div className="grid gap-3 md:grid-cols-3">
+              {workTypes.map((type) => {
+                const Icon = type.icon;
+                const selected = activeWorkType === type.id;
                 return (
-                  <div key={principle.title} className="rounded-[1.5rem] border border-white/10 bg-neutral-950/40 p-5">
-                    <Icon className="h-5 w-5 text-amber-300" />
-                    <h3 className="mt-5 text-lg font-semibold text-white">{principle.title}</h3>
-                    <p className="mt-3 leading-7 text-neutral-400">{principle.description}</p>
-                  </div>
+                  <button
+                    key={type.id}
+                    type="button"
+                    onClick={() => setActiveWorkType(type.id)}
+                    className={`group relative overflow-hidden rounded-[1.35rem] border p-4 text-left transition duration-300 ${selected ? `border-transparent ${type.accentSoft} shadow-xl shadow-slate-950/[0.08] ring-2 ring-offset-2 ring-current` : "border-slate-200 bg-white/75 hover:-translate-y-0.5 hover:border-slate-300 hover:bg-white hover:shadow-lg hover:shadow-slate-950/[0.05]"}`}
+                    aria-pressed={selected}
+                  >
+                    {selected && <span className={`absolute left-0 top-0 h-full w-1.5 ${type.accent}`} />}
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className={`flex h-11 w-11 items-center justify-center rounded-xl ${selected ? `${type.accent} text-white shadow-lg shadow-slate-950/10` : "bg-slate-100 text-slate-600"}`}>
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <div>
+                          <p className="text-sm font-semibold text-slate-950">{type.label}</p>
+                          <p className="text-xs text-slate-500">{type.shortLabel}</p>
+                        </div>
+                      </div>
+                      <ChevronRight className={`h-4 w-4 transition ${selected ? "translate-x-1" : "text-slate-400 group-hover:translate-x-1"}`} />
+                    </div>
+                  </button>
                 );
               })}
             </div>
           </div>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeWorkType}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -14 }}
+              transition={{ duration: 0.26, ease: "easeOut" }}
+              className="grid overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-2xl shadow-slate-950/[0.07] lg:grid-cols-[0.9fr_1.1fr]"
+            >
+              <div className={`bg-gradient-to-br ${active.darkSurface} p-6 text-white md:p-8`}>
+                <div className="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/10">
+                  <ActiveIcon className="h-6 w-6" />
+                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-sky-200">{active.eyebrow}</p>
+                <h3 className="mt-4 text-3xl font-semibold tracking-[-0.035em] md:text-4xl">{active.headline}</h3>
+                <p className="mt-5 max-w-2xl leading-8 text-white/65">{active.description}</p>
+              </div>
+
+              <div className="grid gap-5 p-6 md:p-8">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">What changes in this view</p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {active.focus.map((item) => (
+                      <div key={item} className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                        <span className={`h-2.5 w-2.5 rounded-full ${active.accent}`} />
+                        <span className="text-sm font-semibold text-slate-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-3">
+                  {active.stats.map(([value, label]) => (
+                    <div key={label} className="rounded-[1.25rem] border border-slate-200 bg-white p-4 shadow-sm">
+                      <p className="text-2xl font-semibold tracking-tight text-slate-950">{value}</p>
+                      <p className="mt-1 text-sm leading-5 text-slate-500">{label}</p>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="rounded-[1.5rem] border border-slate-200 bg-slate-50 p-5">
+                  <p className="text-xs font-bold uppercase tracking-[0.22em] text-slate-400">Best review order</p>
+                  <div className="mt-4 grid gap-2">
+                    {active.reviewOrder.map((item, index) => (
+                      <div key={item} className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm">
+                        <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white ${active.accent}`}>{index + 1}</span>
+                        <span className="text-sm font-medium text-slate-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
 
-      <section id="about" className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <p className="mb-3 text-sm font-medium uppercase tracking-[0.22em] text-amber-300">About Me</p>
-            <h2 className="text-4xl font-semibold tracking-tight text-white md:text-5xl">
-              Fresh IT graduate with a creative and real estate background.
-            </h2>
-          </div>
-          <div className="space-y-6 text-lg leading-9 text-neutral-300">
-            <p>
-              I am a fresh IT graduate from University of St. La Salle with a growing interest in combining technology, design, and digital presentation. What started as a passion for creating organized and visually clear layouts eventually evolved into working with websites, branding materials, and digital content for real estate.
-            </p>
-            <p>
-              With a background in IT, I approach design with both creativity and structure in mind. I focus on clean layouts, user-friendly visuals, readability, and modern presentation across digital platforms. At the same time, my experience in real estate taught me how important strong visual communication is when helping people compare properties and make decisions online.
-            </p>
-            <p>
-              This portfolio reflects both the technical and creative side of my work — blending design, technology, and presentation into simple but effective digital experiences.
-            </p>
-            <div className="grid gap-3 sm:grid-cols-2">
+      <section id="about" className="px-5 py-20 lg:px-8">
+        <motion.div {...motionProps} className="mx-auto max-w-7xl">
+          <SectionHeader
+            index="01"
+            eyebrow="About"
+            title="Multidisciplinary, but organized around practical output."
+            description="The portfolio is structured to support fast review by recruiters, hiring managers, clients, and collaborators while keeping every professional direction easy to understand."
+          />
+
+          <motion.div variants={fadeIn} className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+            <Card className="rounded-[2rem] border-slate-200 bg-white shadow-sm">
+              <CardContent className="p-7 md:p-8">
+                <p className="text-lg leading-9 text-slate-600">
+                  I am a BS Information Technology graduate from the University of St. La Salle - Bacolod with a background that connects development, creative design, IT support, and real estate marketing.
+                </p>
+                <p className="mt-5 text-lg leading-9 text-slate-600">
+                  My work combines technical execution with visual presentation, helping me build, support, and present digital materials with clearer purpose and better structure.
+                </p>
+              </CardContent>
+            </Card>
+
+            <div className="grid gap-4 sm:grid-cols-2">
               {[
                 "Based in Bacolod City",
                 "Open to opportunities",
-                "Interested in web and design work",
-                "Focused on clean professional output",
+                "Web, mobile, and IT support background",
+                "Graphic design and real estate marketing experience",
               ].map((item) => (
-                <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-4 text-base text-neutral-300">
-                  <CheckCircle2 className="h-4 w-4 text-amber-300" />
-                  {item}
-                </div>
+                <motion.div key={item} variants={fadeIn} className="flex min-h-28 items-center gap-4 rounded-[1.5rem] border border-slate-200 bg-white p-5 shadow-sm">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                    <CheckCircle2 className="h-5 w-5" />
+                  </span>
+                  <span className="font-semibold leading-6 text-slate-700">{item}</span>
+                </motion.div>
               ))}
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </section>
 
-      <section id="contact" className="relative mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="rounded-[2.5rem] border border-white/10 bg-amber-300 p-8 text-neutral-950 md:p-12">
-          <div className="grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
+      <section id="skills" className="border-y border-slate-200 bg-white px-5 py-20 lg:px-8">
+        <motion.div {...motionProps}>
+          <SectionHeader
+            index="02"
+            eyebrow="Skills"
+            title="Core skill groups aligned to the selected portfolio view."
+            description="Skills are grouped by discipline so hiring teams can quickly separate technical execution, support knowledge, design production, and property marketing abilities."
+          />
+
+          <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2">
+            {activeSkills.map((skill) => {
+              const Icon = skill.icon;
+              return (
+                <motion.div key={skill.title} variants={fadeIn}>
+                  <Card className="h-full rounded-[1.75rem] border-slate-200 bg-slate-50/60 shadow-none transition hover:bg-white hover:shadow-xl hover:shadow-slate-950/[0.04]">
+                    <CardContent className="p-6 md:p-7">
+                      <div className="mb-6 flex items-center justify-between gap-4">
+                        <div className="flex items-center gap-4">
+                          <span className={`flex h-12 w-12 items-center justify-center rounded-xl ${active.accent} text-white`}>
+                            <Icon className="h-5 w-5" />
+                          </span>
+                          <h3 className="text-xl font-semibold tracking-tight text-slate-950">{skill.title}</h3>
+                        </div>
+                        <span className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-400">Skill set</span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {skill.items.map((item) => (
+                          <span key={item} className="rounded-full border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 shadow-sm">
+                            {item}
+                          </span>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      </section>
+
+      <section id="experience" className="px-5 py-20 lg:px-8">
+        <motion.div {...motionProps}>
+          <SectionHeader
+            index="03"
+            eyebrow="Experience"
+            title="Experience presented as a readable professional timeline."
+            description="Each role is organized by timeframe, responsibility, place, and relevant outputs so reviewers can scan the career story without digging through dense text."
+          />
+
+          <div className="mx-auto max-w-7xl">
+            <AnimatePresence mode="wait">
+              <motion.div key={activeWorkType} initial="hidden" animate="visible" exit={{ opacity: 0, y: -12 }} variants={stagger} className="grid gap-4">
+                {activeExperience.map((item, index) => (
+                  <motion.article key={`${item.title}-${item.period}`} variants={fadeIn} layout className="group relative rounded-[1.75rem] border border-slate-200 bg-white p-5 shadow-sm transition hover:border-slate-300 hover:shadow-xl hover:shadow-slate-950/[0.05] md:p-6">
+                    <div className="grid gap-5 lg:grid-cols-[0.28fr_1fr_0.42fr] lg:items-start">
+                      <div>
+                        <p className="text-sm font-semibold text-blue-700">{item.period}</p>
+                        <p className="mt-2 inline-flex rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-500">{item.type}</p>
+                      </div>
+                      <div>
+                        <div className="flex items-start gap-4">
+                          <span className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-950 text-sm font-semibold text-white">{index + 1}</span>
+                          <div>
+                            <h3 className="text-2xl font-semibold tracking-tight text-slate-950">{item.title}</h3>
+                            <p className="mt-1 font-medium text-slate-500">{item.place}</p>
+                            <p className="mt-4 max-w-3xl leading-8 text-slate-600">{item.description}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-wrap gap-2 lg:justify-end">
+                        {item.highlights.map((highlight) => (
+                          <span key={highlight} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-600">
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </section>
+
+      <section id="projects" className="border-y border-slate-200 bg-white px-5 py-20 lg:px-8">
+        <motion.div {...motionProps}>
+          <SectionHeader
+            index="04"
+            eyebrow="Projects"
+            title={`${active.label} samples with case-study style hierarchy.`}
+            description="Projects are the visual centerpiece: the featured sample leads the section, while supporting work is organized into cards with role, technologies, year, impact, and key outcomes visible at a glance."
+          />
+
+          <div className="mx-auto max-w-7xl">
+            <AnimatePresence mode="wait">
+              <motion.div key={activeWorkType} initial="hidden" animate="visible" exit={{ opacity: 0, y: -12 }} variants={stagger}>
+                <motion.div variants={fadeIn} className={`mb-6 overflow-hidden rounded-[2rem] bg-gradient-to-br ${active.darkSurface} p-6 text-white shadow-2xl shadow-slate-950/15 md:p-8`}>
+                  <div className="grid gap-6 lg:grid-cols-[1fr_0.7fr] lg:items-end">
+                    <div>
+                      <p className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.24em] text-sky-200">
+                        <ActiveIcon className="h-4 w-4" />
+                        {active.eyebrow}
+                      </p>
+                      <h3 className="max-w-4xl text-3xl font-semibold tracking-[-0.035em] md:text-5xl">{active.headline}</h3>
+                      <p className="mt-5 max-w-2xl leading-8 text-white/65">{active.description}</p>
+                    </div>
+
+                    <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.06] p-5 backdrop-blur">
+                      <p className="text-xs font-bold uppercase tracking-[0.22em] text-white/45">Recommended review order</p>
+                      <div className="mt-4 grid gap-2">
+                        {active.reviewOrder.map((item, index) => (
+                          <div key={item} className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3">
+                            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-xs font-bold text-slate-950">{index + 1}</span>
+                            <span className="text-sm font-medium text-white/85">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 grid gap-3 md:grid-cols-3">
+                    {active.stats.map(([value, label]) => (
+                      <div key={label} className="rounded-[1.25rem] border border-white/10 bg-white/[0.06] p-4 backdrop-blur">
+                        <p className="text-2xl font-semibold tracking-tight text-white">{value}</p>
+                        <p className="mt-1 text-sm text-white/55">{label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {featuredWork && (
+                  <div className="mb-6">
+                    <ProjectCard item={featuredWork} featured onPreview={() => setSelectedWork(featuredWork)} />
+                  </div>
+                )}
+
+                <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                  {secondaryWork.map((item) => (
+                    <ProjectCard key={item.title} item={item} onPreview={() => setSelectedWork(item)} />
+                  ))}
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+      </section>
+
+      <section id="achievements" className="bg-slate-950 px-5 py-20 text-white lg:px-8">
+        <motion.div {...motionProps}>
+          <SectionHeader
+            index="05"
+            eyebrow="Achievements"
+            title="Certificates, awards, and proof of growth."
+            description="Credentials stay connected to the active portfolio view, keeping the section relevant instead of overwhelming."
+            inverted
+          />
+
+          <div className="mx-auto grid max-w-7xl gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {activeCertificates.map((cert) => (
+              <motion.article key={cert.title} variants={fadeIn}>
+                <Card className="h-full rounded-[1.75rem] border-white/10 bg-white/[0.04] text-white shadow-none transition hover:bg-white/[0.07]">
+                  <CardContent className="p-5">
+                    <div className="relative mb-5 h-44 overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04]">
+                      {cert.image ? (
+                        <SmartImage
+                          src={cert.image}
+                          alt={cert.title}
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          className="object-cover transition duration-500 hover:scale-105"
+                          fallbackLabel={cert.title}
+                        />
+                      ) : (
+                        <div className="flex h-full items-center justify-center">
+                          <BadgeCheck className="h-12 w-12 text-sky-200" />
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.18em] text-sky-200">{cert.year}</p>
+                    <h3 className="mt-3 text-xl font-semibold leading-snug">{cert.title}</h3>
+                    <p className="mt-2 text-sm text-white/45">{cert.issuer}</p>
+                    <p className="mt-5 leading-7 text-white/65">{cert.note}</p>
+                  </CardContent>
+                </Card>
+              </motion.article>
+            ))}
+          </div>
+
+          <div className="mx-auto mt-6 grid max-w-7xl gap-4 md:grid-cols-3">
+            {proofItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <motion.div key={item.label} variants={fadeIn} className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-6">
+                  <Icon className="h-5 w-5 text-sky-200" />
+                  <p className="mt-5 text-sm font-semibold uppercase tracking-[0.18em] text-white/45">{item.label}</p>
+                  <h3 className="mt-2 text-xl font-semibold text-white">{item.value}</h3>
+                  <p className="mt-3 leading-7 text-white/60">{item.note}</p>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      </section>
+
+      <section id="contact" className="px-5 py-20 lg:px-8">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-blue-200 bg-blue-700 text-white shadow-2xl shadow-blue-900/20">
+          <div className="grid gap-8 p-8 md:p-12 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
             <div>
+              <p className="mb-3 text-sm font-semibold uppercase tracking-[0.22em] text-sky-200">Contact</p>
               <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
-                Need a visual, website, or real estate presentation?
+                Let’s connect for design, property marketing, or development work.
               </h2>
-              <p className="mt-5 max-w-2xl text-lg leading-8 text-neutral-800">
-                I’m open to opportunities, design work, simple web projects, and real estate-related inquiries.
+              <p className="mt-5 max-w-2xl text-lg leading-8 text-blue-50/80">
+                Open to opportunities, design work, simple web projects, IT support-related work, and real estate inquiries.
               </p>
             </div>
             <div className="flex flex-col gap-3 lg:items-end">
               <a
                 href="mailto:re.lancejirotacsagon@gmail.com?subject=Portfolio%20Inquiry"
-                className="inline-flex h-12 w-full items-center justify-center rounded-full bg-neutral-950 px-7 text-sm font-medium text-white transition hover:bg-neutral-800 sm:w-auto"
+                className="inline-flex h-12 w-full items-center justify-center rounded-full bg-white px-7 text-sm font-semibold text-blue-700 transition hover:bg-sky-50 sm:w-auto"
               >
                 Email me
                 <Mail className="ml-2 h-4 w-4" />
@@ -953,7 +1287,8 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
               <a
                 href={CV_HREF}
                 download
-                className="inline-flex h-12 items-center justify-center rounded-full bg-white px-7 text-sm font-medium text-neutral-950 transition hover:bg-amber-200">
+                className="inline-flex h-12 w-full items-center justify-center rounded-full border border-white/20 px-7 text-sm font-semibold text-white transition hover:bg-white/10 sm:w-auto"
+              >
                 Download CV
                 <Download className="ml-2 h-4 w-4" />
               </a>
@@ -961,7 +1296,7 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="mx-auto mt-5 grid max-w-7xl gap-4 md:grid-cols-3">
           {[
             { icon: Mail, label: "Email", value: "re.lancejirotacsagon@gmail.com" },
             { icon: Phone, label: "Phone", value: "+63 995 647 1232" },
@@ -969,14 +1304,14 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
           ].map((item) => {
             const Icon = item.icon;
             return (
-              <Card key={item.label} className="rounded-[1.5rem] border-white/10 bg-white/[0.04] text-white shadow-none">
+              <Card key={item.label} className="rounded-[1.5rem] border-slate-200 bg-white text-slate-950 shadow-sm">
                 <CardContent className="flex items-center gap-4 p-5">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-white/5">
-                    <Icon className="h-5 w-5 text-amber-300" />
+                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                    <Icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-sm text-neutral-500">{item.label}</p>
-                    <p className="text-neutral-200">{item.value}</p>
+                    <p className="text-sm text-slate-400">{item.label}</p>
+                    <p className="break-all font-medium text-slate-700">{item.value}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -985,95 +1320,106 @@ export default function LanceJiroTacsagonPortfolioWebsite() {
         </div>
       </section>
 
-      <footer className="relative border-t border-white/10 px-6 py-8">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-5 text-center text-sm text-neutral-500">
+      <footer className="border-t border-slate-200 bg-white px-5 py-8">
+        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-5 text-center text-sm text-slate-500 md:flex-row md:text-left">
+          <p>© 2026 Lance Jiro Tacsagon. Portfolio built with Next.js and TypeScript.</p>
           <div className="flex items-center justify-center gap-3">
             <a
               href="https://www.instagram.com/lncjro"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] transition hover:bg-white/10 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
               aria-label="Instagram"
             >
               <FaInstagram className="h-4 w-4" />
             </a>
-
             <a
               href="https://www.facebook.com/l.jiroooooo"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] transition hover:bg-white/10 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
               aria-label="Facebook"
             >
               <FaFacebookF className="h-4 w-4" />
             </a>
-
             <a
               href="mailto:re.lancejirotacsagon@gmail.com"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] transition hover:bg-white/10 hover:text-white"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 transition hover:bg-blue-50 hover:text-blue-700"
               aria-label="Email"
             >
               <Mail className="h-4 w-4" />
             </a>
           </div>
-          <p>© 2026 Lance Jiro Tacsagon. Built with Next.js, and Typescript.</p>
         </div>
       </footer>
 
-      {selectedWork && (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-neutral-950/80 px-6 backdrop-blur-md">
+      <AnimatePresence>
+        {selectedWork && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="w-full max-w-2xl rounded-[2rem] border border-white/10 bg-neutral-900 p-6 shadow-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[90] flex items-center justify-center bg-slate-950/80 px-5 py-8 backdrop-blur-md"
+            onClick={() => setSelectedWork(null)}
+            role="dialog"
+            aria-modal="true"
           >
-            <div className="flex items-start justify-between gap-5">
-              <div>
-                <p className="text-sm uppercase tracking-[0.22em] text-amber-300">
-                  {selectedWork.category}
-                </p>
-                <h3 className="mt-3 text-3xl font-medium tracking-tight text-white">
-                  {selectedWork.title}
-                </h3>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 16 }}
+              className="max-h-[90vh] w-full max-w-5xl overflow-y-auto rounded-[2rem] border border-white/10 bg-white p-5 text-slate-950 shadow-2xl md:p-6"
+              onClick={(event) => event.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-5">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.22em] text-blue-700">{selectedWork.category}</p>
+                  <h3 className="mt-3 text-3xl font-semibold tracking-tight text-slate-950">{selectedWork.title}</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSelectedWork(null)}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:bg-slate-50 hover:text-slate-950"
+                  aria-label="Close preview"
+                >
+                  <X className="h-5 w-5" />
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setSelectedWork(null)}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-300 transition hover:bg-white/10 hover:text-white"
-                aria-label="Close preview"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
 
-            <div className="relative mt-6 min-h-80 overflow-hidden rounded-[1.5rem] border border-white/10 bg-neutral-950">
-              <Image
-                src={selectedWork.image}
-                alt={selectedWork.title}
-                fill
-                className="object-contain"
-              />
-            </div>
+              <div className="relative mt-6 min-h-[28rem] overflow-hidden rounded-[1.5rem] border border-slate-200 bg-slate-50">
+                <SmartImage
+                  src={selectedWork.image}
+                  alt={selectedWork.title}
+                  sizes="(max-width: 768px) 100vw, 1024px"
+                  className="object-contain"
+                  fallbackLabel={selectedWork.title}
+                />
+              </div>
 
-            <p className="mt-6 leading-8 text-neutral-300">{selectedWork.description}</p>
+              <p className="mt-6 leading-8 text-slate-600">{selectedWork.description}</p>
 
-            <div className="mt-6 grid gap-4 text-sm md:grid-cols-3">
-              <div>
-                <p className="text-neutral-500">Role</p>
-                <p className="mt-1 text-neutral-200">{selectedWork.role}</p>
+              <div className="mt-6 grid gap-4 rounded-[1.25rem] bg-slate-50 p-4 text-sm md:grid-cols-4">
+                <div>
+                  <p className="text-slate-400">Role</p>
+                  <p className="mt-1 font-semibold text-slate-800">{selectedWork.role}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400">Tools</p>
+                  <p className="mt-1 font-semibold text-slate-800">{selectedWork.tools}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400">Year</p>
+                  <p className="mt-1 font-semibold text-slate-800">{selectedWork.year}</p>
+                </div>
+                <div>
+                  <p className="text-slate-400">Status</p>
+                  <p className="mt-1 font-semibold text-slate-800">{selectedWork.status}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-neutral-500">Tools</p>
-                <p className="mt-1 text-neutral-200">{selectedWork.tools}</p>
-              </div>
-              <div>
-                <p className="text-neutral-500">Year</p>
-                <p className="mt-1 text-neutral-200">{selectedWork.year}</p>
-              </div>
-            </div>
+            </motion.div>
           </motion.div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </main>
   );
 }
